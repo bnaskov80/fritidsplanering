@@ -1,0 +1,2299 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Veckoplanering Fritids</title>
+    <style>
+        :root {
+            --bg-color: #f0f4f8;
+            --card-bg: #ffffff;
+            --primary: #1b4965;     /* Djupblå */
+            --accent: #62b6cb;      /* Mjuk blå/turkos */
+            --accent-hover: #52a5b8;
+            --secondary: #bee9e8;   /* Ljus turkos */
+            --border: #d0dbe5;
+            --text-dark: #2b2d42;
+            --danger: #e63946;
+            --danger-hover: #d62839;
+            --board-green: #2a9d8f;
+            --board-orange: #e76f51;
+            --share-purple: #7209b7;
+            --share-hover: #5b0791;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 16px;
+        }
+
+        .container {
+            max-width: 1050px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 28px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(27, 73, 101, 0.08);
+            box-sizing: border-box;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .view-section {
+            display: none;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        /* Användarstatusrad */
+        .user-status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85em;
+            color: #64748b;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .user-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #e2e8f0;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .user-status-bar a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .user-status-bar a:hover {
+            text-decoration: underline;
+        }
+
+        /* Huvudapp Stilar */
+        .header-inputs {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 20px;
+            background-color: #f8fafc;
+            padding: 12px 20px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .header-inputs .form-group {
+            margin-bottom: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-inputs label {
+            margin-bottom: 0;
+            white-space: nowrap;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        button {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9em;
+            transition: all 0.15s ease-in-out;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            touch-action: manipulation;
+        }
+
+        button:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-board {
+            background-color: var(--board-green);
+        }
+        .btn-board:hover {
+            background-color: #21867a;
+        }
+
+        .btn-share {
+            background-color: var(--share-purple);
+        }
+        .btn-share:hover {
+            background-color: var(--share-hover);
+        }
+
+        .btn-letter {
+            background-color: var(--board-orange);
+        }
+        .btn-letter:hover {
+            background-color: #d65a3d;
+        }
+
+        .btn-print {
+            background-color: var(--primary);
+        }
+        .btn-print:hover {
+            background-color: #14364d;
+        }
+
+        .btn-secondary { background-color: #6c757d; }
+        .btn-secondary:hover { background-color: #5a6268; }
+
+        .btn-danger { background-color: var(--danger); }
+        .btn-danger:hover { background-color: var(--danger-hover); }
+
+        .print-lgr-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #4a5568;
+            text-transform: none;
+            cursor: pointer;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            padding: 8px 12px;
+            border-radius: 8px;
+            user-select: none;
+        }
+        .print-lgr-toggle input {
+            margin: 0;
+            width: auto;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .section-title {
+            background-color: var(--primary);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 8px;
+            margin-top: 30px;
+            margin-bottom: 18px;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 18px;
+        }
+
+        .card {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 18px;
+            background-color: #f8fafc;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: var(--primary);
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 8px;
+            font-size: 1.15em;
+        }
+
+        .form-group { margin-bottom: 14px; }
+
+        label {
+            display: block;
+            font-size: 0.85em;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: #4a5568;
+            text-transform: uppercase;
+        }
+
+        select, input, textarea {
+            width: 100%;
+            padding: 9px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 0.9em;
+            background-color: #ffffff;
+            color: var(--text-dark);
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            background: #ffffff;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            max-height: 130px;
+            overflow-y: auto;
+        }
+
+        .checkbox-group label {
+            font-weight: 500;
+            font-size: 0.85em;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin: 0;
+            cursor: pointer;
+            text-transform: none;
+        }
+
+        .checkbox-group input { width: auto; accent-color: var(--primary); }
+
+        .lgr-box {
+            background-color: #eef7fc;
+            border-left: 4px solid var(--accent);
+            padding: 10px;
+            font-size: 0.85em;
+            color: #2b4c6f;
+            margin-top: 6px;
+            min-height: 48px;
+            border-radius: 0 6px 6px 0;
+            line-height: 1.4;
+        }
+
+        .bakis-extra { display: none; margin-top: 8px; }
+
+        /* SKÄRM / INFOTAVLA STILAR */
+        #board-view {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 4px;
+        }
+
+        #board-view:fullscreen {
+            padding: 24px;
+            overflow-y: auto;
+            background: #f8fafc;
+            width: 100vw;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+
+        #board-view:-webkit-full-screen {
+            padding: 24px;
+            overflow-y: auto;
+            background: #f8fafc;
+            width: 100vw;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .board-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .board-title {
+            margin: 0;
+            font-size: 1.5em;
+            color: var(--primary);
+            text-align: center;
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .board-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .board-subbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .board-period-badge {
+            background: #e0f2fe;
+            color: #0369a1;
+            font-weight: 700;
+            font-size: 1em;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid #bae6fd;
+            white-space: nowrap;
+        }
+
+        .board-tabs {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .board-tab {
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.88em;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: none;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+        }
+
+        .board-tab:hover {
+            background: #e2e8f0;
+            color: #1e293b;
+            transform: none;
+        }
+
+        .board-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 2px 6px rgba(27, 73, 101, 0.25);
+        }
+
+        /* Dagsvy på infotavlan */
+        .board-day-container {
+            animation: fadeIn 0.2s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .board-day-header {
+            background: linear-gradient(135deg, #1b4965, #2a9d8f);
+            color: white;
+            border-radius: 12px;
+            padding: 16px 22px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .board-day-header h3 {
+            margin: 0;
+            font-size: 1.5em;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .board-day-header .board-day-tag {
+            background: rgba(255, 255, 255, 0.25);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .board-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .board-big-card {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            box-sizing: border-box;
+        }
+
+        .board-big-card.halvklass-card {
+            border-top: 6px solid #62b6cb;
+        }
+
+        .board-big-card.afternoon-card {
+            border-top: 6px solid #e76f51;
+        }
+
+        .board-card-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8em;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 5px 12px;
+            border-radius: 6px;
+            width: fit-content;
+        }
+
+        .badge-halvklass {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .badge-afternoon {
+            background: #ffedd5;
+            color: #c2410c;
+        }
+
+        .board-activity-name {
+            font-size: 1.5em;
+            font-weight: 800;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            line-height: 1.25;
+            word-break: break-word;
+        }
+
+        .board-activity-icon {
+            font-size: 1.4em;
+            background: white;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            flex-shrink: 0;
+        }
+
+        .board-groups-box {
+            margin-top: 4px;
+        }
+
+        .board-groups-label {
+            font-size: 0.8em;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .board-group-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .board-group-tag {
+            font-size: 0.88em;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .board-teacher-info {
+            font-size: 1em;
+            color: #334155;
+            background: #ffffff;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            word-break: break-word;
+        }
+
+        .board-extra-note {
+            background: #fef9c3;
+            border: 1px solid #fde047;
+            color: #854d0e;
+            padding: 12px 14px;
+            border-radius: 8px;
+            font-size: 0.95em;
+            line-height: 1.4;
+        }
+
+        /* Veckovy på infotavlan */
+        .board-week-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+        }
+
+        @media (max-width: 1024px) {
+            .board-week-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 650px) {
+            .board-week-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .board-week-col {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .board-week-col.is-today {
+            border-color: var(--board-green);
+            box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.25);
+            background: #ffffff;
+        }
+
+        .board-col-header {
+            text-align: center;
+            padding: 8px;
+            background: #e2e8f0;
+            border-radius: 8px;
+            font-weight: 800;
+            color: var(--primary);
+            font-size: 1.05em;
+        }
+
+        .board-week-col.is-today .board-col-header {
+            background: var(--board-green);
+            color: white;
+        }
+
+        .board-col-item {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .board-col-item-title {
+            font-weight: 700;
+            font-size: 0.95em;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .board-col-item-groups {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .board-col-group-tag {
+            font-size: 0.75em;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        .board-col-teacher {
+            font-size: 0.8em;
+            color: #64748b;
+        }
+
+        .board-empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            background: #f8fafc;
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            color: #64748b;
+            font-size: 1.1em;
+        }
+
+        /* MODAL STILAR (VECKOBREV & DELA) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 16px;
+            box-sizing: border-box;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 14px;
+            width: 100%;
+            max-width: 620px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            padding: 24px;
+            animation: modalFadeIn 0.2s ease-out;
+            box-sizing: border-box;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.96); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: var(--primary);
+            font-size: 1.25em;
+        }
+
+        .modal-close-btn {
+            background: none;
+            border: none;
+            font-size: 1.4em;
+            color: #64748b;
+            cursor: pointer;
+            box-shadow: none;
+            padding: 2px 8px;
+            border-radius: 6px;
+        }
+
+        .modal-close-btn:hover {
+            background: #f1f5f9;
+            color: var(--danger);
+            transform: none;
+        }
+
+        .modal-intro {
+            font-size: 0.9em;
+            color: #475569;
+            margin-top: 0;
+            margin-bottom: 14px;
+            line-height: 1.45;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        /* Toast-avisering */
+        .toast {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.95em;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: toastPop 0.2s ease-out;
+            white-space: nowrap;
+        }
+        @keyframes toastPop {
+            from { opacity: 0; transform: translate(-50%, 15px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
+        }
+
+        /* Skärm vs Utskrift helpers */
+        .print-only { display: none; }
+        #print-header { display: none; }
+
+        /* ==========================================================
+           MOBILANPASSNING & RESPONSIVITET (TELEFONER OCH SURFPLATTOR)
+           ========================================================== */
+        @media (max-width: 640px) {
+            body {
+                padding: 8px;
+            }
+
+            .container {
+                padding: 14px;
+                border-radius: 12px;
+            }
+
+            h1 {
+                font-size: 1.45em;
+                margin-bottom: 14px;
+            }
+
+            .user-status-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+
+            .header-inputs {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+                padding: 12px;
+            }
+
+            .header-inputs .form-group {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .header-inputs input {
+                flex: 1;
+            }
+
+            .actions {
+                justify-content: stretch;
+                gap: 8px;
+            }
+
+            .actions button, .actions .print-lgr-toggle {
+                flex: 1 1 calc(50% - 6px);
+                min-width: 130px;
+                padding: 10px 8px;
+                font-size: 0.84em;
+                justify-content: center;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+
+            .card {
+                padding: 14px;
+            }
+
+            /* Infotavla på mobil */
+            .board-topbar {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+                gap: 10px;
+            }
+
+            .board-title {
+                font-size: 1.3em;
+            }
+
+            .board-actions {
+                justify-content: center;
+                width: 100%;
+            }
+
+            .board-actions button {
+                flex: 1 1 auto;
+                font-size: 0.85em;
+                padding: 8px 12px;
+            }
+
+            .board-subbar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+
+            .board-period-badge {
+                text-align: center;
+                font-size: 0.9em;
+                padding: 6px 12px;
+            }
+
+            /* Horisontell swipe-bar för dagarna */
+            .board-tabs {
+                display: flex;
+                overflow-x: auto;
+                padding-bottom: 6px;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                width: 100%;
+                flex-wrap: nowrap;
+            }
+
+            .board-tabs::-webkit-scrollbar {
+                display: none;
+            }
+
+            .board-tab {
+                white-space: nowrap;
+                flex-shrink: 0;
+                padding: 8px 14px;
+                font-size: 0.85em;
+            }
+
+            .board-day-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 6px;
+                padding: 12px 14px;
+            }
+
+            .board-day-header h3 {
+                font-size: 1.3em;
+            }
+
+            .board-cards-grid {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+
+            .board-big-card {
+                padding: 16px;
+            }
+
+            .board-activity-name {
+                font-size: 1.3em;
+                gap: 10px;
+            }
+
+            .board-activity-icon {
+                width: 44px;
+                height: 44px;
+                font-size: 1.2em;
+            }
+        }
+
+        /* Utskrift */
+        @media print {
+            body { background-color: white !important; padding: 0 !important; color: #000 !important; }
+            .container { box-shadow: none !important; padding: 0 !important; max-width: 100% !important; border-radius: 0 !important; }
+            .actions, button, .view-section:not(.active), #letter-modal, #share-modal, .header-inputs, .board-topbar, .board-subbar, .user-status-bar, .toast { display: none !important; }
+            
+            /* Print Header för standardplaneringen */
+            #app-view.active #print-header {
+                display: block !important;
+                text-align: center;
+                margin-bottom: 20px;
+                padding-bottom: 8px;
+                border-bottom: 2px solid var(--primary);
+            }
+            #app-view.active #print-header h2 {
+                margin: 0 0 4px 0;
+                color: var(--primary) !important;
+                font-size: 1.5em;
+            }
+            #app-view.active #print-header p {
+                margin: 0;
+                font-size: 1em;
+                font-weight: 700;
+                color: #475569;
+            }
+
+            #app-view.active #app-title { display: none !important; }
+
+            /* Dölj dropdowns och formulärelement – visa snygg ren text */
+            select, .checkbox-group, input { display: none !important; }
+            .print-only { display: block !important; }
+
+            .activity-print-val {
+                font-size: 1.05em;
+                font-weight: 800;
+                color: var(--primary);
+                margin-bottom: 4px;
+            }
+            .teacher-print-val {
+                font-size: 0.88em;
+                font-weight: 600;
+                color: #334155;
+                margin-bottom: 4px;
+            }
+            .groups-print-val {
+                font-size: 0.85em;
+                font-weight: 700;
+                color: #1e293b;
+                margin-bottom: 6px;
+                background: #f1f5f9;
+                padding: 3px 8px;
+                border-radius: 4px;
+                display: inline-block !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .bakis-print-val {
+                font-size: 0.85em;
+                font-weight: 600;
+                color: #854d0e;
+                background: #fef9c3;
+                padding: 3px 8px;
+                border-radius: 4px;
+                margin-bottom: 6px;
+                display: inline-block !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .card {
+                border: 1px solid #cbd5e1 !important;
+                break-inside: avoid;
+                background: white !important;
+                padding: 12px !important;
+                box-shadow: none !important;
+                margin-bottom: 12px;
+            }
+            .card h3 {
+                font-size: 1.05em !important;
+                margin-top: 0;
+                margin-bottom: 8px;
+                padding-bottom: 4px;
+                border-bottom: 2px solid var(--secondary) !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .form-group {
+                margin-bottom: 6px !important;
+            }
+            .form-group label {
+                font-size: 0.75em !important;
+                margin-bottom: 2px !important;
+                color: #64748b !important;
+            }
+
+            .section-title {
+                background-color: var(--primary) !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                padding: 6px 12px !important;
+                margin-top: 16px !important;
+                margin-bottom: 10px !important;
+                font-size: 1em !important;
+            }
+
+            .lgr-box {
+                font-size: 0.8em !important;
+                padding: 6px 8px !important;
+                min-height: auto !important;
+                background: #f8fafc !important;
+                border-left: 3px solid var(--accent) !important;
+                color: #334155 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            /* Om Lgr22 är bortbockat vid utskrift */
+            .hide-lgr-print .lgr-box,
+            .hide-lgr-print .lgr-group {
+                display: none !important;
+            }
+
+            /* Utskrift av Infotavlan för barn/anslagstavla */
+            #board-view.active {
+                display: block !important;
+                padding: 0 !important;
+            }
+            #board-view.active .board-day-header {
+                background: var(--primary) !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                padding: 10px 16px !important;
+                margin-bottom: 14px !important;
+            }
+            #board-view.active .board-big-card {
+                border: 1px solid #cbd5e1 !important;
+                break-inside: avoid;
+                box-shadow: none !important;
+                padding: 14px !important;
+                background: white !important;
+            }
+            #board-view.active .board-week-grid {
+                grid-template-columns: repeat(5, 1fr) !important;
+                gap: 8px !important;
+            }
+            #board-view.active .board-week-col {
+                border: 1px solid #cbd5e1 !important;
+                padding: 8px !important;
+                background: white !important;
+            }
+            #board-view.active .board-col-header {
+                background: #f1f5f9 !important;
+                color: var(--primary) !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                font-size: 0.9em !important;
+                padding: 4px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- PLANERINGSVY -->
+    <div id="app-view" class="view-section active">
+        <!-- Inloggningsstatus bar -->
+        <div class="user-status-bar">
+            <span id="user-display"><span class="user-badge">👤 Lokal session</span></span>
+            <a href="index.html">⚙️ Ändra inställningar & inloggning</a>
+        </div>
+
+        <!-- Rubrik vid utskrift -->
+        <div id="print-header">
+            <h2 id="print-header-title">Veckoplanering Fritidshemmet</h2>
+            <p id="print-header-sub">Vecka --</p>
+        </div>
+
+        <h1 id="app-title">Veckoplanering Fritidshemmet</h1>
+
+        <!-- FÄLT FÖR VECKA OCH DATUM -->
+        <div class="header-inputs">
+            <div class="form-group">
+                <label for="week-num">Vecka:</label>
+                <input type="number" id="week-num" placeholder="t.ex. 40" style="width: 80px;" oninput="saveAllData()">
+            </div>
+            <div class="form-group">
+                <label for="date-range">Datum / Period:</label>
+                <input type="text" id="date-range" placeholder="t.ex. 29 sep - 3 okt" style="width: 220px;" oninput="saveAllData()">
+            </div>
+        </div>
+
+        <div class="actions">
+            <button type="button" class="btn-board" onclick="showBoardView()">📺 Infotavla för elever</button>
+            <button type="button" class="btn-share" onclick="shareInfotavla()">📲 Dela med kollegor</button>
+            <button type="button" class="btn-letter" onclick="openParentLetterModal()">📝 Veckobrev till föräldrar</button>
+            <button type="button" class="btn-print" onclick="prepareAndPrint()">🖨️ Skriv ut / PDF</button>
+            <label class="print-lgr-toggle" title="Välj om Lgr22-mål ska inkluderas på utskriften eller döljas för ett renare elevschema">
+                <input type="checkbox" id="print-include-lgr" checked> Inkludera Lgr22
+            </label>
+            <button type="button" class="btn-secondary" onclick="goToSettings()">⚙️ Alternativ & Inloggning</button>
+            <button type="button" class="btn-secondary" onclick="exportData()">💾 Exportera fil</button>
+            <button type="button" class="btn-danger" onclick="clearSavedData()">🧹 Rensa</button>
+        </div>
+
+        <!-- HALVKLASSER (Dynamiskt) -->
+        <div id="halvklass-section">
+            <div class="section-title">Halvklassaktiviteter</div>
+            <div class="grid" id="halvklass-container"></div>
+        </div>
+
+        <!-- EFTERMIDDAGSAKTIVITETER -->
+        <div class="section-title">Eftermiddagsaktiviteter (15:00 - 16:00)</div>
+        <div class="grid" id="afternoon-container"></div>
+    </div>
+
+    <!-- INFOTAVLA FÖR ELEVER (SMARTBOARD / SKÄRM) -->
+    <div id="board-view" class="view-section">
+        <div class="board-topbar">
+            <button type="button" class="btn-secondary" onclick="returnToAppView()">⬅ Tillbaka</button>
+            <h2 class="board-title">🌟 Fritidstavlan: <span id="board-grade-title"></span></h2>
+            <div class="board-actions">
+                <button type="button" class="btn-share" onclick="shareInfotavla()">📲 Dela tavla</button>
+                <button type="button" id="fullscreen-btn" class="btn-board" onclick="toggleFullScreen()">⛶ Helskärm</button>
+                <button type="button" class="btn-print" onclick="window.print()">🖨️ Skriv ut</button>
+            </div>
+        </div>
+
+        <div class="board-subbar">
+            <div class="board-period-badge" id="board-period-badge">Vecka --</div>
+            <div class="board-tabs" id="board-tabs">
+                <button type="button" class="board-tab active" data-day="idag" onclick="switchBoardTab('idag')">🌟 Idag</button>
+                <button type="button" class="board-tab" data-day="måndag" onclick="switchBoardTab('måndag')">Måndag</button>
+                <button type="button" class="board-tab" data-day="tisdag" onclick="switchBoardTab('tisdag')">Tisdag</button>
+                <button type="button" class="board-tab" data-day="onsdag" onclick="switchBoardTab('onsdag')">Onsdag</button>
+                <button type="button" class="board-tab" data-day="torsdag" onclick="switchBoardTab('torsdag')">Torsdag</button>
+                <button type="button" class="board-tab" data-day="fredag" onclick="switchBoardTab('fredag')">Fredag</button>
+                <button type="button" class="board-tab" data-day="vecka" onclick="switchBoardTab('vecka')">📅 Hela veckan</button>
+            </div>
+        </div>
+
+        <!-- Dynamiskt innehåll för Infotavlan -->
+        <div id="board-content" class="board-content"></div>
+    </div>
+
+</div>
+
+<!-- MODAL FÖR VECKOBREV (FÖRÄLDRAR / UNIKUM / SCHOOLSOFT) -->
+<div id="letter-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>📝 Veckobrev för vårdnadshavare</h3>
+            <button type="button" class="modal-close-btn" onclick="closeParentLetterModal()" title="Stäng">✕</button>
+        </div>
+        <p class="modal-intro">
+            Denna text genereras automatiskt från veckoplaneringen. Du kan redigera texten fritt nedan och sedan kopiera den direkt till <strong>Unikum, SchoolSoft, Vklass</strong> eller e-post.
+        </p>
+        <textarea id="letter-text" rows="13" style="width: 100%; font-family: inherit; font-size: 0.95em; line-height: 1.5; padding: 12px; border-radius: 8px; border: 1px solid var(--border); box-sizing: border-box; resize: vertical;"></textarea>
+        <div class="modal-footer">
+            <button type="button" id="copy-letter-btn" class="btn-board" style="font-size: 1em; padding: 10px 22px;" onclick="copyLetterText()">📋 Kopiera till urklipp</button>
+            <button type="button" class="btn-secondary" onclick="closeParentLetterModal()">Stäng</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL FÖR DELNING MED KOLLEGOR -->
+<div id="share-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>📲 Dela med kollegor</h3>
+            <button type="button" class="modal-close-btn" onclick="closeShareModal()" title="Stäng">✕</button>
+        </div>
+        <p class="modal-intro">
+            Skicka länken nedan till dina kollegor via <strong>Teams, WhatsApp, SMS eller mejl</strong>. När de klickar på länken öppnas Infotavlan direkt på deras mobil eller dator!
+        </p>
+
+        <div class="form-group">
+            <label for="share-url-input">Direktlänk till Infotavlan:</label>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <input type="text" id="share-url-input" readonly onclick="this.select()" style="flex: 1; min-width: 200px; font-size: 0.85em; background: #f8fafc; font-family: monospace;">
+                <button type="button" id="copy-share-btn" class="btn-share" style="white-space: nowrap; padding: 9px 16px;" onclick="copyShareUrl()">📋 Kopiera länk</button>
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap;">
+            <a id="share-whatsapp-btn" href="#" target="_blank" class="btn-board" style="text-decoration: none; padding: 8px 14px; font-size: 0.88em; background-color: #25D366;">💬 WhatsApp</a>
+            <a id="share-email-btn" href="#" class="btn-secondary" style="text-decoration: none; padding: 8px 14px; font-size: 0.88em;">✉️ E-post</a>
+            <button type="button" class="btn-letter" style="font-size: 0.88em; padding: 8px 14px;" onclick="copyDaySummaryText()">📝 Kopiera dagens text</button>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn-secondary" onclick="closeShareModal()">Stäng</button>
+        </div>
+    </div>
+</div>
+
+<!-- Liten toast-avisering -->
+<div id="toast-notification" class="toast" style="display: none;"></div>
+
+<script>
+    let appConfig = {
+        grade: "Åk 2",
+        halvklassCount: 2,
+        teachers: ["Bruno", "Hanna", "Sigrid"],
+        groups: ["Loket", "Gul vagn", "Röd vagn", "Grön vagn", "Blå vagn", "Lila vagn"],
+        activitiesList: [
+            { name: "Skapande", lgr: "Skapande genom olika estetiska uttrycksformer, bild och form samt pröva och utveckla idéer." },
+            { name: "Utedag", lgr: "Utforskande av närmiljö och natur, allemansrätt samt säkerhet och hänsyn i naturmiljöer." },
+            { name: "Fritidsgympa", lgr: "Initiativförmåga, grovmotorik, rörelseglädje samt förståelse för regler och samarbete i leken." },
+            { name: "Bakis (Ute/Samarbete/Skogslek)", lgr: "Samarbetsövningar, lek och rörelse i naturmiljöer, utforskande av skogen samt regelföljande i lek och idrott." },
+            { name: "Värdegrund & Relationer", lgr: "Identitet, relationer och gemenskap. Hur man agerar som en schysst kamrat, hanterar konflikter samt demokratiska värderingar och likabehandling." }
+        ]
+    };
+
+    const days = [
+        { id: "måndag", name: "Måndag", defaultAct: "" },
+        { id: "tisdag", name: "Tisdag", defaultAct: "" },
+        { id: "onsdag", name: "Onsdag", defaultAct: "Bakis (Ute/Samarbete/Skogslek)", allChecked: true },
+        { id: "torsdag", name: "Torsdag", defaultAct: "Fritidsgympa" },
+        { id: "fredag", name: "Fredag", defaultAct: "" }
+    ];
+
+    let currentBoardTab = "idag";
+
+    /* --- TOAST-AVISERINGAR --- */
+    function showToast(msg, duration = 3000) {
+        const toast = document.getElementById('toast-notification');
+        if (!toast) return;
+        toast.textContent = msg;
+        toast.style.display = 'flex';
+        clearTimeout(window._toastTimeout);
+        window._toastTimeout = setTimeout(() => {
+            toast.style.display = 'none';
+        }, duration);
+    }
+
+    /* --- NAVIGERING --- */
+    function goToSettings() {
+        saveAllData();
+        window.location.href = 'index.html';
+    }
+
+    /* --- HJÄLPFUNKTIONER FÖR IKONER OCH STILAR --- */
+    function escapeHtml(str) {
+        if (!str) return "";
+        return String(str)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    function getActivityIcon(name) {
+        if (!name) return "📋";
+        const lower = name.toLowerCase();
+        if (lower.includes("skapande") || lower.includes("bild") || lower.includes("pyssel") || lower.includes("måla") || lower.includes("lera")) return "🎨";
+        if (lower.includes("ute") || lower.includes("natur") || lower.includes("skog") || lower.includes("park") || lower.includes("äventyr")) return "🌲";
+        if (lower.includes("gympa") || lower.includes("idrott") || lower.includes("sport") || lower.includes("boll") || lower.includes("bad")) return "⚽";
+        if (lower.includes("bakis") || lower.includes("samarbete") || lower.includes("lek") || lower.includes("hinderbana")) return "🤝";
+        if (lower.includes("värdegrund") || lower.includes("relation") || lower.includes("kamrat") || lower.includes("trygghet")) return "💛";
+        if (lower.includes("film") || lower.includes("bio")) return "🎬";
+        if (lower.includes("musik") || lower.includes("dans") || lower.includes("sång") || lower.includes("disco")) return "🎵";
+        if (lower.includes("spel") || lower.includes("lego") || lower.includes("bygge") || lower.includes("konstruktion")) return "🎲";
+        if (lower.includes("baka") || lower.includes("mat") || lower.includes("mellis") || lower.includes("frukt")) return "🍎";
+        if (lower.includes("läs") || lower.includes("bok") || lower.includes("vila") || lower.includes("saga")) return "📚";
+        if (lower.includes("digital") || lower.includes("programmering") || lower.includes("robot")) return "💻";
+        return "⭐";
+    }
+
+    function getGroupBadgeStyle(name) {
+        const lower = name.toLowerCase();
+        if (lower.includes("gul")) return "background-color: #fef08a; color: #854d0e; border: 1px solid #fde047;";
+        if (lower.includes("röd")) return "background-color: #fee2e2; color: #991b1b; border: 1px solid #fca5a5;";
+        if (lower.includes("grön")) return "background-color: #dcfce7; color: #166534; border: 1px solid #86efac;";
+        if (lower.includes("blå")) return "background-color: #dbeafe; color: #1e40af; border: 1px solid #93c5fd;";
+        if (lower.includes("lila")) return "background-color: #f3e8ff; color: #6b21a8; border: 1px solid #d8b4fe;";
+        if (lower.includes("loket")) return "background-color: #ffedd5; color: #9a3412; border: 1px solid #fdba74;";
+        return "background-color: #e2e8f0; color: #1e293b; border: 1px solid #cbd5e1;";
+    }
+
+    function getTodayDayName() {
+        const dayIndex = new Date().getDay(); // 0 = Sön, 1 = Mån, 2 = Tis, 3 = Ons, 4 = Tor, 5 = Fre, 6 = Lör
+        const map = { 1: "Måndag", 2: "Tisdag", 3: "Onsdag", 4: "Torsdag", 5: "Fredag" };
+        return map[dayIndex] || null;
+    }
+
+    /* Samlar ihop all data strukturerat från planeringsvyn */
+    function getPlanningData() {
+        const weekEl = document.getElementById('week-num');
+        const dateEl = document.getElementById('date-range');
+        const weekNum = weekEl ? weekEl.value.trim() : "";
+        const dateRange = dateEl ? dateEl.value.trim() : "";
+        const halvklassDays = ["Måndag", "Torsdag", "Tisdag", "Onsdag"].slice(0, appConfig.halvklassCount);
+
+        const weekData = {
+            grade: appConfig.grade,
+            weekNum: weekNum,
+            dateRange: dateRange,
+            days: {}
+        };
+
+        const dayKeys = [
+            { id: "måndag", name: "Måndag" },
+            { id: "tisdag", name: "Tisdag" },
+            { id: "onsdag", name: "Onsdag" },
+            { id: "torsdag", name: "Torsdag" },
+            { id: "fredag", name: "Fredag" }
+        ];
+
+        dayKeys.forEach(dk => {
+            weekData.days[dk.name] = {
+                id: dk.id,
+                name: dk.name,
+                halvklass: null,
+                afternoon: null
+            };
+        });
+
+        // Hämta Halvklasser
+        halvklassDays.forEach((dayName, idx) => {
+            const card = document.querySelector(`.card[data-id="halvklass-${idx}"]`);
+            if (card && weekData.days[dayName]) {
+                const act = card.querySelector('.activity-select') ? card.querySelector('.activity-select').value : "";
+                const teacher = card.querySelector('.teacher-select') ? card.querySelector('.teacher-select').value : "";
+                const bakis = card.querySelector('.bakis-input') ? card.querySelector('.bakis-input').value.trim() : "";
+                const lgr = card.querySelector('.lgr-box') ? card.querySelector('.lgr-box').textContent.trim() : "";
+                weekData.days[dayName].halvklass = {
+                    activity: act,
+                    teacher: teacher,
+                    bakis: bakis,
+                    lgr: lgr
+                };
+            }
+        });
+
+        // Hämta Eftermiddagar
+        dayKeys.forEach(dk => {
+            const card = document.querySelector(`.card[data-id="${dk.id}"]`);
+            if (card && weekData.days[dk.name]) {
+                const checkedGroups = Array.from(card.querySelectorAll('.checkbox-group input:checked')).map(cb => cb.value);
+                const act = card.querySelector('.activity-select') ? card.querySelector('.activity-select').value : "";
+                const teacher = card.querySelector('.teacher-select') ? card.querySelector('.teacher-select').value : "";
+                const bakis = card.querySelector('.bakis-input') ? card.querySelector('.bakis-input').value.trim() : "";
+                const lgr = card.querySelector('.lgr-box') ? card.querySelector('.lgr-box').textContent.trim() : "";
+                weekData.days[dk.name].afternoon = {
+                    activity: act,
+                    groups: checkedGroups,
+                    teacher: teacher,
+                    bakis: bakis,
+                    lgr: lgr
+                };
+            }
+        });
+
+        return weekData;
+    }
+
+    /* --- DELNING MED KOLLEGOR (DELA INFOTAVLAN) --- */
+    function generateShareUrl(onlyBoard = true) {
+        saveAllData();
+        const data = getPlanningData();
+
+        // Skapa ett kompakt delningspaket
+        const payload = {
+            c: appConfig,
+            p: {
+                weekNum: data.weekNum,
+                dateRange: data.dateRange,
+                cards: {}
+            }
+        };
+
+        document.querySelectorAll('.card').forEach(card => {
+            const id = card.getAttribute('data-id');
+            const checked = Array.from(card.querySelectorAll('.checkbox-group input:checked')).map(cb => cb.value);
+            const actSel = card.querySelector('.activity-select');
+            const teachSel = card.querySelector('.teacher-select');
+            const bakisInput = card.querySelector('.bakis-input');
+            payload.p.cards[id] = {
+                groups: checked,
+                activity: actSel ? actSel.value : "",
+                teacher: teachSel ? teachSel.value : "",
+                bakisInput: bakisInput ? bakisInput.value : ""
+            };
+        });
+
+        const jsonStr = JSON.stringify(payload);
+        const encoded = btoa(encodeURIComponent(jsonStr));
+        const baseUrl = window.location.href.split('#')[0];
+        const viewParam = onlyBoard ? "board" : "app";
+        return `${baseUrl}#share=${encoded}&view=${viewParam}`;
+    }
+
+    function shareInfotavla() {
+        const shareUrl = generateShareUrl(true);
+        const data = getPlanningData();
+        const title = `Fritidstavlan: ${appConfig.grade} (v. ${data.weekNum || ''})`;
+        const text = `Här är veckans planering och Infotavla för ${appConfig.grade}!`;
+
+        // Använd native Web Share API på mobiler (iPhone / Android)
+        if (navigator.share) {
+            navigator.share({
+                title: title,
+                text: text,
+                url: shareUrl
+            }).then(() => {
+                showToast("✅ Tavlan delades!");
+            }).catch(err => {
+                if (err.name !== 'AbortError') {
+                    openShareModal(shareUrl);
+                }
+            });
+        } else {
+            openShareModal(shareUrl);
+        }
+    }
+
+    function openShareModal(url) {
+        const shareUrl = url || generateShareUrl(true);
+        document.getElementById('share-url-input').value = shareUrl;
+        
+        // Uppdatera snabblänkar
+        const data = getPlanningData();
+        const msg = encodeURIComponent(`Hej! Här är veckans Fritidstavla för ${appConfig.grade}: ${shareUrl}`);
+        document.getElementById('share-whatsapp-btn').href = `https://api.whatsapp.com/send?text=${msg}`;
+        document.getElementById('share-email-btn').href = `mailto:?subject=${encodeURIComponent('Fritidstavlan: ' + appConfig.grade)}&body=${msg}`;
+        
+        document.getElementById('share-modal').style.display = 'flex';
+        const copyBtn = document.getElementById('copy-share-btn');
+        copyBtn.textContent = '📋 Kopiera länk';
+        copyBtn.style.backgroundColor = 'var(--share-purple)';
+    }
+
+    function closeShareModal() {
+        document.getElementById('share-modal').style.display = 'none';
+    }
+
+    function copyShareUrl() {
+        const input = document.getElementById('share-url-input');
+        input.select();
+        const copyBtn = document.getElementById('copy-share-btn');
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(input.value).then(() => {
+                copyBtn.textContent = '✅ Kopierat!';
+                copyBtn.style.backgroundColor = '#10b981';
+                showToast("✅ Länk kopierad till urklipp!");
+                setTimeout(() => {
+                    copyBtn.textContent = '📋 Kopiera länk';
+                    copyBtn.style.backgroundColor = 'var(--share-purple)';
+                }, 3000);
+            });
+        } else {
+            document.execCommand('copy');
+            copyBtn.textContent = '✅ Kopierat!';
+            copyBtn.style.backgroundColor = '#10b981';
+            showToast("✅ Länk kopierad!");
+            setTimeout(() => {
+                copyBtn.textContent = '📋 Kopiera länk';
+                copyBtn.style.backgroundColor = 'var(--share-purple)';
+            }, 3000);
+        }
+    }
+
+    function copyDaySummaryText() {
+        const data = getPlanningData();
+        const todayName = getTodayDayName() || "Måndag";
+        const dayInfo = data.days[todayName];
+
+        let text = `☀️ Dagens fritids (${todayName}, ${data.grade}):\n`;
+        let hasContent = false;
+
+        if (dayInfo && dayInfo.halvklass && dayInfo.halvklass.activity) {
+            hasContent = true;
+            text += `• Halvklass: ${dayInfo.halvklass.activity} (Ansvarig: ${dayInfo.halvklass.teacher || '–'})\n`;
+        }
+        if (dayInfo && dayInfo.afternoon && dayInfo.afternoon.activity) {
+            hasContent = true;
+            const groups = (dayInfo.afternoon.groups && dayInfo.afternoon.groups.length > 0) ? ` för ${dayInfo.afternoon.groups.join(', ')}` : "";
+            text += `• Eftermiddag (15:00-16:00): ${dayInfo.afternoon.activity}${groups} (Ansvarig: ${dayInfo.afternoon.teacher || '–'})\n`;
+            if (dayInfo.afternoon.bakis) {
+                text += `  Övning: ${dayInfo.afternoon.bakis}\n`;
+            }
+        }
+        if (!hasContent) {
+            text += `• Fri lek, skapande och utevistelse.\n`;
+        }
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast("✅ Dagens text kopierad! Klistra in i Teams/SMS.");
+            });
+        } else {
+            showToast("✅ Dagens sammanfattning redo.");
+        }
+    }
+
+    /* Kontrollera inkommande delad länk (#share=...) */
+    function checkIncomingSharedData() {
+        const hash = window.location.hash;
+        if (hash.includes('share=')) {
+            try {
+                const params = new URLSearchParams(hash.substring(1));
+                const shareData = params.get('share');
+                const view = params.get('view');
+                if (shareData) {
+                    const jsonStr = decodeURIComponent(atob(shareData));
+                    const payload = JSON.parse(jsonStr);
+
+                    if (payload.c) {
+                        appConfig = payload.c;
+                        localStorage.setItem('fritidsConfigStateCustomAct', JSON.stringify(appConfig));
+                    }
+                    if (payload.p) {
+                        localStorage.setItem('fritidsPlaneringStateCustomAct', JSON.stringify(payload.p));
+                    }
+
+                    buildAppUI();
+                    loadSavedData();
+                    showToast(`✅ Inläst delad planering för ${appConfig.grade}!`);
+
+                    if (view === 'board' || !view) {
+                        showBoardView();
+                    }
+                    return true;
+                }
+            } catch(e) {
+                console.error("Kunde inte läsa in delad data", e);
+            }
+        }
+        return false;
+    }
+
+    /* --- BYGG APPGUIN --- */
+    function buildAppUI() {
+        document.getElementById('app-title').textContent = `Veckoplanering Fritidshemmet ${appConfig.grade}`;
+        if (document.getElementById('print-header-title')) {
+            document.getElementById('print-header-title').textContent = `Veckoplanering Fritidshemmet – ${appConfig.grade}`;
+        }
+
+        // Generera Halvklasser
+        const halvklassSec = document.getElementById('halvklass-section');
+        const halvklassContainer = document.getElementById('halvklass-container');
+        halvklassContainer.innerHTML = "";
+
+        if (appConfig.halvklassCount === 0) {
+            halvklassSec.style.display = "none";
+        } else {
+            halvklassSec.style.display = "block";
+            const halvklassDays = ["Måndag", "Torsdag", "Tisdag", "Onsdag"].slice(0, appConfig.halvklassCount);
+            
+            halvklassDays.forEach((dayName, idx) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.setAttribute('data-id', `halvklass-${idx}`);
+                card.innerHTML = `
+                    <h3>${dayName} – Halvklass</h3>
+                    <div class="form-group">
+                        <label>Aktivitet</label>
+                        <select class="activity-select" onchange="updateLgr(this); saveAllData();"><option value="">Välj aktivitet...</option></select>
+                    </div>
+                    <div class="form-group bakis-extra">
+                        <label>Specifik samarbetsövning</label>
+                        <input type="text" class="bakis-input" oninput="saveAllData()" placeholder="t.ex. Knopen, Stafett...">
+                    </div>
+                    <div class="form-group">
+                        <label>Ansvarig pedagog</label>
+                        <select class="teacher-select" onchange="saveAllData()"><option value="">Välj ansvarig...</option></select>
+                    </div>
+                    <div class="form-group lgr-group">
+                        <label>Lgr22 Koppling</label>
+                        <div class="lgr-box">Välj aktivitet för att se mål...</div>
+                    </div>
+                `;
+                halvklassContainer.appendChild(card);
+            });
+        }
+
+        // Generera Eftermiddagar
+        const afternoonContainer = document.getElementById('afternoon-container');
+        afternoonContainer.innerHTML = "";
+
+        const groupsList = (appConfig.groups && appConfig.groups.length > 0)
+            ? appConfig.groups
+            : ["Loket", "Gul vagn", "Röd vagn", "Grön vagn", "Blå vagn", "Lila vagn"];
+
+        days.forEach(dayObj => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.setAttribute('data-id', dayObj.id);
+
+            let checkboxesHtml = `<div class="checkbox-group">`;
+            groupsList.forEach(g => {
+                const checkedAttr = dayObj.allChecked ? "checked" : "";
+                checkboxesHtml += `
+                    <label>
+                        <input type="checkbox" value="${escapeHtml(g)}" ${checkedAttr} onchange="saveAllData()"> ${escapeHtml(g)}
+                    </label>`;
+            });
+            checkboxesHtml += `</div>`;
+
+            card.innerHTML = `
+                <h3>${dayObj.name}</h3>
+                <div class="form-group">
+                    <label>Deltagande grupper (kryssa för alla som deltar)</label>
+                    ${checkboxesHtml}
+                </div>
+                <div class="form-group">
+                    <label>Aktivitet</label>
+                    <select class="activity-select" onchange="updateLgr(this); saveAllData();"><option value="">Välj aktivitet...</option></select>
+                </div>
+                <div class="form-group bakis-extra">
+                    <label>Specifik samarbetsövning</label>
+                    <input type="text" class="bakis-input" oninput="saveAllData()" placeholder="t.ex. Knopen, Stafett...">
+                </div>
+                <div class="form-group">
+                    <label>Ansvarig pedagog</label>
+                    <select class="teacher-select" onchange="saveAllData()"><option value="">Välj ansvarig...</option></select>
+                </div>
+                <div class="form-group lgr-group">
+                    <label>Lgr22 Koppling</label>
+                    <div class="lgr-box">Välj aktivitet för att se mål...</div>
+                </div>
+            `;
+            afternoonContainer.appendChild(card);
+
+            if(dayObj.defaultAct) {
+                const actSel = card.querySelector('.activity-select');
+                if(appConfig.activitiesList.some(a => a.name === dayObj.defaultAct)) {
+                    actSel.value = dayObj.defaultAct;
+                }
+            }
+        });
+
+        populateSelects(document);
+        loadSavedData();
+    }
+
+    function populateSelects(container) {
+        container.querySelectorAll('.activity-select').forEach(sel => {
+            if(sel.options.length <= 1) {
+                appConfig.activitiesList.forEach(actObj => sel.add(new Option(actObj.name, actObj.name)));
+            }
+        });
+        container.querySelectorAll('.teacher-select').forEach(sel => {
+            if(sel.options.length <= 1) {
+                appConfig.teachers.forEach(t => sel.add(new Option(t, t)));
+            }
+        });
+
+        container.querySelectorAll('.activity-select').forEach(sel => updateLgr(sel));
+    }
+
+    function updateLgr(selectEl) {
+        const val = selectEl.value;
+        const card = selectEl.closest('.card');
+        const lgrBox = card.querySelector('.lgr-box');
+        const bakisExtra = card.querySelector('.bakis-extra');
+
+        const actObj = appConfig.activitiesList.find(a => a.name === val);
+        lgrBox.textContent = actObj ? (actObj.lgr || "Ingen Lgr22-beskrivning angiven.") : "Välj aktivitet för att se mål...";
+
+        if (val.includes("Bakis")) {
+            bakisExtra.style.display = "block";
+        } else {
+            bakisExtra.style.display = "none";
+        }
+    }
+
+    /* --- LOCALSTORAGE & EXPORT --- */
+    function saveAllData() {
+        const weekEl = document.getElementById('week-num');
+        const dateEl = document.getElementById('date-range');
+        if (!weekEl || !dateEl) return;
+
+        const state = {
+            weekNum: weekEl.value,
+            dateRange: dateEl.value,
+            cards: {}
+        };
+
+        document.querySelectorAll('.card').forEach(card => {
+            const id = card.getAttribute('data-id');
+            const checkedGroups = Array.from(card.querySelectorAll('.checkbox-group input:checked')).map(cb => cb.value);
+            const actSel = card.querySelector('.activity-select');
+            const teachSel = card.querySelector('.teacher-select');
+            const activity = actSel ? actSel.value : "";
+            const bakisInput = card.querySelector('.bakis-input') ? card.querySelector('.bakis-input').value : "";
+            const teacher = teachSel ? teachSel.value : "";
+
+            state.cards[id] = {
+                groups: checkedGroups,
+                activity: activity,
+                bakisInput: bakisInput,
+                teacher: teacher
+            };
+        });
+
+        localStorage.setItem('fritidsPlaneringStateCustomAct', JSON.stringify(state));
+    }
+
+    function loadSavedData() {
+        const saved = localStorage.getItem('fritidsPlaneringStateCustomAct');
+        if (!saved) return;
+
+        try {
+            const state = JSON.parse(saved);
+
+            if (state.weekNum !== undefined) document.getElementById('week-num').value = state.weekNum;
+            if (state.dateRange !== undefined) document.getElementById('date-range').value = state.dateRange;
+
+            if (state.cards) {
+                document.querySelectorAll('.card').forEach(card => {
+                    const id = card.getAttribute('data-id');
+                    if (state.cards[id]) {
+                        const data = state.cards[id];
+
+                        if (data.groups) {
+                            card.querySelectorAll('.checkbox-group input').forEach(cb => {
+                                cb.checked = data.groups.includes(cb.value);
+                            });
+                        }
+
+                        const actSel = card.querySelector('.activity-select');
+                        if (actSel && data.activity !== undefined) {
+                            actSel.value = data.activity;
+                            updateLgr(actSel);
+                        }
+
+                        const bakisInput = card.querySelector('.bakis-input');
+                        if (bakisInput && data.bakisInput !== undefined) {
+                            bakisInput.value = data.bakisInput;
+                        }
+
+                        const teachSel = card.querySelector('.teacher-select');
+                        if (teachSel && data.teacher !== undefined) {
+                            teachSel.value = data.teacher;
+                        }
+                    }
+                });
+            }
+        } catch (e) {
+            console.error("Kunde inte läsa in sparad planering", e);
+        }
+    }
+
+    function clearSavedData() {
+        if (confirm("Är du säker på att du vill rensa den sparade planeringen?")) {
+            localStorage.removeItem('fritidsPlaneringStateCustomAct');
+            location.reload();
+        }
+    }
+
+    function exportData() {
+        const weekNum = document.getElementById('week-num').value;
+        const dateRange = document.getElementById('date-range').value;
+        const plan = [];
+
+        document.querySelectorAll('.card').forEach(card => {
+            const title = card.querySelector('h3').textContent;
+            const checkedGroups = Array.from(card.querySelectorAll('.checkbox-group input:checked')).map(cb => cb.value);
+            const activity = card.querySelector('.activity-select').value;
+            const bakisExercise = card.querySelector('.bakis-input') ? card.querySelector('.bakis-input').value : "";
+            const teacher = card.querySelector('.teacher-select').value;
+            const lgr = card.querySelector('.lgr-box').textContent;
+
+            plan.push({
+                title,
+                groups: checkedGroups.length > 0 ? checkedGroups : "Alla/Halvklass",
+                activity,
+                samarbetsövning: activity.includes("Bakis") ? bakisExercise : "N/A",
+                teacher,
+                lgr
+            });
+        });
+
+        const exportObject = {
+            avdelning: appConfig.grade,
+            vecka: weekNum,
+            period: dateRange,
+            planering: plan
+        };
+
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObject, null, 2));
+        const downloadAnchor = document.createElement('a');
+        downloadAnchor.setAttribute("href", dataStr);
+        downloadAnchor.setAttribute("download", `veckoplanering_${appConfig.grade}_v${weekNum || 'x'}.json`);
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+    }
+
+    /* --- INFOTAVLA FÖR ELEVER (SMARTBOARD / SKÄRM) --- */
+    function showBoardView() {
+        saveAllData();
+        document.getElementById('app-view').classList.remove('active');
+        document.getElementById('board-view').classList.add('active');
+
+        document.getElementById('board-grade-title').textContent = appConfig.grade;
+        const weekNum = document.getElementById('week-num').value.trim();
+        const dateRange = document.getElementById('date-range').value.trim();
+        let periodText = "";
+        if (weekNum) periodText += `Vecka ${weekNum}`;
+        if (dateRange) periodText += (periodText ? " • " : "") + dateRange;
+        document.getElementById('board-period-badge').textContent = periodText || "Aktuell planering";
+
+        currentBoardTab = "idag";
+        document.querySelectorAll('.board-tab').forEach(b => {
+            b.classList.toggle('active', b.getAttribute('data-day') === 'idag');
+        });
+
+        renderBoardContent();
+    }
+
+    function returnToAppView() {
+        if (document.fullscreenElement) {
+            document.exitFullscreen().catch(() => {});
+        }
+        document.getElementById('board-view').classList.remove('active');
+        document.getElementById('app-view').classList.add('active');
+    }
+
+    function toggleFullScreen() {
+        const elem = document.getElementById('board-view');
+        if (!document.fullscreenElement) {
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen().catch(err => console.log("Helskärm ej tillgängligt:", err));
+            }
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen().catch(err => console.log("Kunde inte lämna helskärm:", err));
+            }
+        }
+    }
+
+    document.addEventListener('fullscreenchange', () => {
+        const btn = document.getElementById('fullscreen-btn');
+        if (btn) {
+            if (document.fullscreenElement) {
+                btn.innerHTML = '🗗 Avsluta';
+            } else {
+                btn.innerHTML = '⛶ Helskärm';
+            }
+        }
+    });
+
+    function switchBoardTab(tabId) {
+        currentBoardTab = tabId;
+        document.querySelectorAll('.board-tab').forEach(b => {
+            b.classList.toggle('active', b.getAttribute('data-day') === tabId);
+        });
+        renderBoardContent();
+    }
+
+    function renderBoardContent() {
+        const container = document.getElementById('board-content');
+        if (!container) return;
+
+        if (currentBoardTab === "vecka") {
+            container.innerHTML = renderBoardWeekView();
+        } else if (currentBoardTab === "idag") {
+            const todayName = getTodayDayName();
+            if (todayName) {
+                container.innerHTML = renderBoardDayView(todayName, true);
+            } else {
+                container.innerHTML = `
+                    <div style="background: #fef3c7; border: 1px solid #fcd34d; color: #92400e; padding: 14px 20px; border-radius: 12px; margin-bottom: 20px; font-weight: 600; font-size: 1.05em; text-align: center;">
+                        🏖️ Det är helg! Visar måndagens planering nedan:
+                    </div>
+                    ${renderBoardDayView("Måndag", false)}
+                `;
+            }
+        } else {
+            const capitalized = currentBoardTab.charAt(0).toUpperCase() + currentBoardTab.slice(1);
+            container.innerHTML = renderBoardDayView(capitalized, false);
+        }
+    }
+
+    function renderBoardDayView(dayName, isTodayGreeting = false) {
+        const data = getPlanningData();
+        const dayInfo = data.days[dayName];
+        if (!dayInfo) return `<div class="board-empty-state">Ingen information sparad för ${escapeHtml(dayName)}.</div>`;
+
+        const greeting = isTodayGreeting ? `☀️ Idag är det ${escapeHtml(dayName)}!` : `📅 ${escapeHtml(dayName)}`;
+        const tagText = isTodayGreeting ? "Aktuell dag" : escapeHtml(dayName);
+
+        let cardsHtml = "";
+        let hasAnyActivity = false;
+
+        // Halvklasspass
+        if (dayInfo.halvklass && dayInfo.halvklass.activity) {
+            hasAnyActivity = true;
+            const icon = getActivityIcon(dayInfo.halvklass.activity);
+            cardsHtml += `
+                <div class="board-big-card halvklass-card">
+                    <div class="board-card-badge badge-halvklass">🎒 Halvklasspass</div>
+                    <div class="board-activity-name">
+                        <span class="board-activity-icon">${icon}</span>
+                        <span>${escapeHtml(dayInfo.halvklass.activity)}</span>
+                    </div>
+                    ${dayInfo.halvklass.teacher ? `
+                        <div class="board-teacher-info">
+                            <span>👤</span> <strong>Ansvarig pedagog:</strong> ${escapeHtml(dayInfo.halvklass.teacher)}
+                        </div>
+                    ` : ''}
+                    ${dayInfo.halvklass.bakis ? `
+                        <div class="board-extra-note">
+                            💡 <strong>Dagens utmaning:</strong> ${escapeHtml(dayInfo.halvklass.bakis)}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        // Eftermiddagsaktivitet
+        if (dayInfo.afternoon && dayInfo.afternoon.activity) {
+            hasAnyActivity = true;
+            const icon = getActivityIcon(dayInfo.afternoon.activity);
+            let groupsBadgesHtml = "";
+            if (dayInfo.afternoon.groups && dayInfo.afternoon.groups.length > 0) {
+                groupsBadgesHtml = dayInfo.afternoon.groups.map(g => {
+                    const style = getGroupBadgeStyle(g);
+                    return `<span class="board-group-tag" style="${style}">${escapeHtml(g)}</span>`;
+                }).join('');
+            } else {
+                groupsBadgesHtml = `<span class="board-group-tag" style="background: #e2e8f0; color: #475569;">Alla grupper</span>`;
+            }
+
+            cardsHtml += `
+                <div class="board-big-card afternoon-card">
+                    <div class="board-card-badge badge-afternoon">⏰ Eftermiddag (15:00 - 16:00)</div>
+                    <div class="board-activity-name">
+                        <span class="board-activity-icon">${icon}</span>
+                        <span>${escapeHtml(dayInfo.afternoon.activity)}</span>
+                    </div>
+                    <div class="board-groups-box">
+                        <div class="board-groups-label">Deltagande grupper:</div>
+                        <div class="board-group-badges">${groupsBadgesHtml}</div>
+                    </div>
+                    ${dayInfo.afternoon.teacher ? `
+                        <div class="board-teacher-info">
+                            <span>👤</span> <strong>Ansvarig pedagog:</strong> ${escapeHtml(dayInfo.afternoon.teacher)}
+                        </div>
+                    ` : ''}
+                    ${dayInfo.afternoon.bakis ? `
+                        <div class="board-extra-note">
+                            💡 <strong>Samarbetsövning:</strong> ${escapeHtml(dayInfo.afternoon.bakis)}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        if (!hasAnyActivity) {
+            cardsHtml = `
+                <div class="board-empty-state">
+                    <div style="font-size: 2.5em; margin-bottom: 12px;">🎈</div>
+                    <h3 style="margin: 0 0 8px 0; color: var(--primary);">Fri lek, skapande och utevistelse!</h3>
+                    <p style="margin: 0;">Ingen gemensam planerad aktivitet inlagd för ${escapeHtml(dayName)}.</p>
+                </div>
+            `;
+        }
+
+        return `
+            <div class="board-day-container">
+                <div class="board-day-header">
+                    <h3>${greeting}</h3>
+                    <span class="board-day-tag">${tagText}</span>
+                </div>
+                <div class="board-cards-grid">
+                    ${cardsHtml}
+                </div>
+            </div>
+        `;
+    }
+
+    function renderBoardWeekView() {
+        const data = getPlanningData();
+        const todayName = getTodayDayName();
+        const dayNames = ["Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag"];
+
+        let colsHtml = "";
+
+        dayNames.forEach(day => {
+            const dayInfo = data.days[day];
+            const isToday = (day === todayName);
+            let itemsHtml = "";
+
+            if (dayInfo.halvklass && dayInfo.halvklass.activity) {
+                const icon = getActivityIcon(dayInfo.halvklass.activity);
+                itemsHtml += `
+                    <div class="board-col-item" style="border-left: 4px solid #62b6cb;">
+                        <div style="font-size: 0.75em; font-weight: 800; color: #0369a1; text-transform: uppercase;">🎒 Halvklass</div>
+                        <div class="board-col-item-title"><span>${icon}</span> <span>${escapeHtml(dayInfo.halvklass.activity)}</span></div>
+                        ${dayInfo.halvklass.teacher ? `<div class="board-col-teacher">👤 ${escapeHtml(dayInfo.halvklass.teacher)}</div>` : ''}
+                    </div>
+                `;
+            }
+
+            if (dayInfo.afternoon && dayInfo.afternoon.activity) {
+                const icon = getActivityIcon(dayInfo.afternoon.activity);
+                let groupTags = "";
+                if (dayInfo.afternoon.groups && dayInfo.afternoon.groups.length > 0) {
+                    groupTags = dayInfo.afternoon.groups.map(g => {
+                        const style = getGroupBadgeStyle(g);
+                        return `<span class="board-col-group-tag" style="${style}">${escapeHtml(g)}</span>`;
+                    }).join('');
+                }
+                itemsHtml += `
+                    <div class="board-col-item" style="border-left: 4px solid #e76f51;">
+                        <div style="font-size: 0.75em; font-weight: 800; color: #c2410c; text-transform: uppercase;">⏰ 15:00 - 16:00</div>
+                        <div class="board-col-item-title"><span>${icon}</span> <span>${escapeHtml(dayInfo.afternoon.activity)}</span></div>
+                        ${groupTags ? `<div class="board-col-item-groups">${groupTags}</div>` : ''}
+                        ${dayInfo.afternoon.teacher ? `<div class="board-col-teacher">👤 ${escapeHtml(dayInfo.afternoon.teacher)}</div>` : ''}
+                    </div>
+                `;
+            }
+
+            if (!itemsHtml) {
+                itemsHtml = `
+                    <div class="board-col-item" style="color: #94a3b8; text-align: center; padding: 18px 6px; font-size: 0.85em;">
+                        Fri lek 🌈
+                    </div>
+                `;
+            }
+
+            colsHtml += `
+                <div class="board-week-col ${isToday ? 'is-today' : ''}">
+                    <div class="board-col-header">${day} ${isToday ? '⭐' : ''}</div>
+                    ${itemsHtml}
+                </div>
+            `;
+        });
+
+        return `
+            <div class="board-day-container">
+                <div class="board-week-grid">
+                    ${colsHtml}
+                </div>
+            </div>
+        `;
+    }
+
+    /* --- VECKOBREV FÖR VÅRDNADSHAVARE --- */
+    function generateParentLetter() {
+        const data = getPlanningData();
+        const weekStr = data.weekNum ? `vecka ${data.weekNum}` : "kommande vecka";
+        const dateStr = data.dateRange ? ` (${data.dateRange})` : "";
+        const gradeStr = data.grade || "Fritidshemmet";
+
+        let text = `Hej alla elever och vårdnadshavare!\n\n`;
+        text += `Här kommer veckans planering för ${gradeStr} ${weekStr}${dateStr}:\n\n`;
+
+        const dayNames = ["Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag"];
+        dayNames.forEach(day => {
+            const dayInfo = data.days[day];
+            text += `📅 ${day.toUpperCase()}\n`;
+            let hasContent = false;
+
+            if (dayInfo.halvklass && dayInfo.halvklass.activity) {
+                hasContent = true;
+                let actText = `• Halvklass: ${dayInfo.halvklass.activity}`;
+                if (dayInfo.halvklass.bakis) {
+                    actText += ` (Övning: ${dayInfo.halvklass.bakis})`;
+                }
+                if (dayInfo.halvklass.teacher) {
+                    actText += ` – Ansvarig: ${dayInfo.halvklass.teacher}`;
+                }
+                text += `${actText}\n`;
+            }
+
+            if (dayInfo.afternoon && dayInfo.afternoon.activity) {
+                hasContent = true;
+                let actText = `• Eftermiddag (15:00 - 16:00): ${dayInfo.afternoon.activity}`;
+                if (dayInfo.afternoon.groups && dayInfo.afternoon.groups.length > 0) {
+                    actText += ` [Grupper: ${dayInfo.afternoon.groups.join(', ')}]`;
+                }
+                if (dayInfo.afternoon.bakis) {
+                    actText += ` (Övning: ${dayInfo.afternoon.bakis})`;
+                }
+                if (dayInfo.afternoon.teacher) {
+                    actText += ` – Ansvarig: ${dayInfo.afternoon.teacher}`;
+                }
+                text += `${actText}\n`;
+            }
+
+            if (!hasContent) {
+                text += `• Fri lek, skapande och utevistelse\n`;
+            }
+            text += `\n`;
+        });
+
+        const teacherList = (appConfig.teachers && appConfig.teachers.length > 0)
+            ? appConfig.teachers.join(', ')
+            : "pedagogerna";
+        text += `Tveka inte att höra av er om ni har några funderingar.\n\nVänliga hälsningar,\n${teacherList}`;
+
+        return text;
+    }
+
+    function openParentLetterModal() {
+        saveAllData();
+        const letterText = generateParentLetter();
+        document.getElementById('letter-text').value = letterText;
+        document.getElementById('letter-modal').style.display = 'flex';
+        const copyBtn = document.getElementById('copy-letter-btn');
+        copyBtn.textContent = '📋 Kopiera till urklipp';
+        copyBtn.style.backgroundColor = 'var(--board-green)';
+    }
+
+    function closeParentLetterModal() {
+        document.getElementById('letter-modal').style.display = 'none';
+    }
+
+    function copyLetterText() {
+        const textarea = document.getElementById('letter-text');
+        textarea.select();
+        const btn = document.getElementById('copy-letter-btn');
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(textarea.value).then(() => {
+                btn.textContent = '✅ Kopierat!';
+                btn.style.backgroundColor = '#10b981';
+                showToast("✅ Veckobrev kopierat till urklipp!");
+                setTimeout(() => {
+                    btn.textContent = '📋 Kopiera till urklipp';
+                    btn.style.backgroundColor = 'var(--board-green)';
+                }, 3000);
+            }).catch(() => {
+                fallbackCopy(textarea, btn);
+            });
+        } else {
+            fallbackCopy(textarea, btn);
+        }
+    }
+
+    function fallbackCopy(textarea, btn) {
+        document.execCommand('copy');
+        btn.textContent = '✅ Kopierat!';
+        btn.style.backgroundColor = '#10b981';
+        showToast("✅ Kopierat!");
+        setTimeout(() => {
+            btn.textContent = '📋 Kopiera till urklipp';
+            btn.style.backgroundColor = 'var(--board-green)';
+        }, 3000);
+    }
+
+    window.addEventListener('click', (e) => {
+        const letterModal = document.getElementById('letter-modal');
+        const shareModal = document.getElementById('share-modal');
+        if (e.target === letterModal) closeParentLetterModal();
+        if (e.target === shareModal) closeShareModal();
+    });
+
+    /* --- UTSKRIFTSOPTIMERING --- */
+    function prepareAndPrint() {
+        preparePrint();
+        window.print();
+    }
+
+    function preparePrint() {
+        const includeLgr = document.getElementById('print-include-lgr') ? document.getElementById('print-include-lgr').checked : true;
+        if (includeLgr) {
+            document.body.classList.remove('hide-lgr-print');
+        } else {
+            document.body.classList.add('hide-lgr-print');
+        }
+
+        const weekNum = document.getElementById('week-num') ? document.getElementById('week-num').value.trim() : "";
+        const dateRange = document.getElementById('date-range') ? document.getElementById('date-range').value.trim() : "";
+        const printTitle = document.getElementById('print-header-title');
+        const printSub = document.getElementById('print-header-sub');
+
+        if (printTitle) {
+            printTitle.textContent = `Veckoplanering Fritidshemmet – ${appConfig.grade}`;
+        }
+        if (printSub) {
+            let subText = "";
+            if (weekNum) subText += `Vecka ${weekNum}`;
+            if (dateRange) subText += (subText ? " • " : "") + dateRange;
+            printSub.textContent = subText || "Aktuell vecka";
+        }
+
+        document.querySelectorAll('.card').forEach(card => {
+            // Grupper
+            const groupContainer = card.querySelector('.checkbox-group');
+            if (groupContainer) {
+                let groupPrint = card.querySelector('.groups-print-val');
+                if (!groupPrint) {
+                    groupPrint = document.createElement('div');
+                    groupPrint.className = 'groups-print-val print-only';
+                    groupContainer.parentNode.insertBefore(groupPrint, groupContainer.nextSibling);
+                }
+                const checked = Array.from(groupContainer.querySelectorAll('input:checked')).map(cb => cb.value);
+                groupPrint.textContent = checked.length > 0 ? `Grupper: ${checked.join(', ')}` : "Grupper: Alla deltar";
+            }
+
+            // Aktivitet
+            const actSel = card.querySelector('.activity-select');
+            if (actSel) {
+                let actPrint = card.querySelector('.activity-print-val');
+                if (!actPrint) {
+                    actPrint = document.createElement('div');
+                    actPrint.className = 'activity-print-val print-only';
+                    actSel.parentNode.insertBefore(actPrint, actSel.nextSibling);
+                }
+                actPrint.textContent = actSel.value ? `${getActivityIcon(actSel.value)} ${actSel.value}` : "– Ingen aktivitet vald –";
+            }
+
+            // Samarbetsövning (bakis)
+            const bakisInput = card.querySelector('.bakis-input');
+            if (bakisInput) {
+                let bakisPrint = card.querySelector('.bakis-print-val');
+                if (!bakisPrint) {
+                    bakisPrint = document.createElement('div');
+                    bakisPrint.className = 'bakis-print-val print-only';
+                    bakisInput.parentNode.insertBefore(bakisPrint, bakisInput.nextSibling);
+                }
+                if (bakisInput.value.trim()) {
+                    bakisPrint.textContent = `Övning: ${bakisInput.value.trim()}`;
+                    bakisPrint.style.display = 'inline-block';
+                } else {
+                    bakisPrint.textContent = "";
+                    bakisPrint.style.display = 'none';
+                }
+            }
+
+            // Pedagog
+            const teachSel = card.querySelector('.teacher-select');
+            if (teachSel) {
+                let teachPrint = card.querySelector('.teacher-print-val');
+                if (!teachPrint) {
+                    teachPrint = document.createElement('div');
+                    teachPrint.className = 'teacher-print-val print-only';
+                    teachSel.parentNode.insertBefore(teachPrint, teachSel.nextSibling);
+                }
+                teachPrint.textContent = teachSel.value ? `Ansvarig pedagog: ${teachSel.value}` : "– Ingen ansvarig pedagog angiven –";
+            }
+        });
+    }
+
+    window.addEventListener('beforeprint', preparePrint);
+
+    /* INITIALISERINGS-LOGIK */
+    window.onload = function() {
+        // Kontrollera om sidan öppnades via en delad länk (#share=...)
+        const wasShared = checkIncomingSharedData();
+
+        // Kontrollera inloggad användare
+        const authSaved = localStorage.getItem('fritidsAuthState');
+        const userDisplay = document.getElementById('user-display');
+        if (authSaved) {
+            try {
+                const auth = JSON.parse(authSaved);
+                if (auth.isLoggedIn && auth.username) {
+                    userDisplay.innerHTML = `<span class="user-badge" style="background: #dcfce7; color: #166534;">👤 Inloggad: ${escapeHtml(auth.username)}</span>`;
+                }
+            } catch(e) {}
+        }
+
+        if (!wasShared) {
+            // Läs konfiguration
+            const savedConfig = localStorage.getItem('fritidsConfigStateCustomAct');
+            if (savedConfig) {
+                try {
+                    appConfig = JSON.parse(savedConfig);
+                } catch (e) {
+                    console.error("Kunde inte läsa konfiguration, använder standard.", e);
+                }
+            }
+            buildAppUI();
+        }
+    };
+</script>
+
+</body>
+</html>
