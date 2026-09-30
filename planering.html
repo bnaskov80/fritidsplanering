@@ -4,47 +4,87 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>Veckoplanering Fritids</title>
+    <!-- Google Fonts: Plus Jakarta Sans, Noto Color Emoji & Material Symbols Rounded -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Color+Emoji&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <style>
         :root {
-            --bg-color: #f0f4f8;
+            --bg-color: #f8fafc;
             --card-bg: #ffffff;
-            --primary: #1b4965;     /* Djupblå */
-            --accent: #62b6cb;      /* Mjuk blå/turkos */
-            --accent-hover: #52a5b8;
-            --secondary: #bee9e8;   /* Ljus turkos */
-            --border: #d0dbe5;
-            --text-dark: #2b2d42;
-            --danger: #e63946;
-            --danger-hover: #d62839;
-            --board-green: #2a9d8f;
-            --board-orange: #e76f51;
-            --share-purple: #7209b7;
-            --share-hover: #5b0791;
+            --primary: #0f2b48;          /* Djup premium marinblå */
+            --primary-light: #1e3a5f;
+            --accent: #0284c7;           /* Fräsch oceanblå */
+            --accent-hover: #0369a1;
+            --secondary: #e0f2fe;        /* Ljus mjuk isblå */
+            --border: #e2e8f0;
+            --border-hover: #cbd5e1;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --danger: #ef4444;
+            --danger-hover: #dc2626;
+            --board-green: #0d9488;      /* Modern teal/emerald */
+            --board-green-hover: #0f766e;
+            --board-orange: #ea580c;     /* Varm koral */
+            --board-orange-hover: #c2410c;
+            --share-purple: #7c3aed;     /* Iris violett */
+            --share-hover: #6d28d9;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --shadow-subtle: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+            --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            --shadow-float: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Color Emoji', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-dark);
             margin: 0;
-            padding: 16px;
+            padding: 20px 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Material Symbols & Noto Emoji */
+        .material-symbols-rounded {
+            font-family: 'Material Symbols Rounded', sans-serif;
+            font-weight: normal;
+            font-style: normal;
+            font-size: 1.25em;
+            line-height: 1;
+            display: inline-block;
+            vertical-align: middle;
+            letter-spacing: normal;
+            text-transform: none;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-smoothing: antialiased;
+            font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .noto-emoji {
+            font-family: 'Noto Color Emoji', sans-serif;
+            font-style: normal;
         }
 
         .container {
-            max-width: 1050px;
+            max-width: 1080px;
             margin: 0 auto;
             background: var(--card-bg);
-            padding: 28px;
-            border-radius: 16px;
-            box-shadow: 0 8px 30px rgba(27, 73, 101, 0.08);
+            padding: 32px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-float);
             box-sizing: border-box;
         }
 
-        h1, h2 {
-            text-align: center;
+        h1, h2, h3 {
             color: var(--primary);
-            margin-bottom: 20px;
             font-weight: 700;
+            letter-spacing: -0.015em;
         }
 
         .view-section {
@@ -61,45 +101,67 @@
             justify-content: space-between;
             align-items: center;
             font-size: 0.85em;
-            color: #64748b;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
+            color: var(--text-muted);
+            margin-bottom: 18px;
+            padding-bottom: 12px;
             border-bottom: 1px solid var(--border);
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 10px;
         }
 
         .user-badge {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: #e2e8f0;
-            padding: 4px 10px;
+            background: #f1f5f9;
+            padding: 5px 12px;
             border-radius: 20px;
             font-weight: 600;
             color: #334155;
+            border: 1px solid #e2e8f0;
         }
 
         .user-status-bar a {
-            color: var(--primary);
+            color: var(--accent);
             text-decoration: none;
             font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: color 0.15s ease;
         }
         .user-status-bar a:hover {
+            color: var(--accent-hover);
             text-decoration: underline;
         }
 
-        /* Huvudapp Stilar */
+        /* App header */
+        .app-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .app-header h1 {
+            margin: 0 0 6px 0;
+            font-size: 1.85em;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        /* Fält för vecka och datum */
         .header-inputs {
             display: flex;
-            gap: 15px;
+            gap: 20px;
             justify-content: center;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             background-color: #f8fafc;
-            padding: 12px 20px;
-            border-radius: 10px;
+            padding: 14px 24px;
+            border-radius: var(--radius-md);
             border: 1px solid var(--border);
             flex-wrap: wrap;
+            box-shadow: var(--shadow-subtle);
         }
 
         .header-inputs .form-group {
@@ -112,13 +174,17 @@
         .header-inputs label {
             margin-bottom: 0;
             white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
+        /* Åtgärdsknappar */
         .actions {
             display: flex;
             gap: 8px;
             justify-content: flex-end;
-            margin-bottom: 25px;
+            margin-bottom: 28px;
             flex-wrap: wrap;
             align-items: center;
         }
@@ -127,13 +193,14 @@
             background-color: var(--accent);
             color: white;
             border: none;
-            padding: 10px 16px;
-            border-radius: 8px;
+            padding: 9px 15px;
+            border-radius: var(--radius-sm);
             cursor: pointer;
+            font-family: inherit;
             font-weight: 600;
-            font-size: 0.9em;
-            transition: all 0.15s ease-in-out;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+            font-size: 0.88em;
+            transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: var(--shadow-subtle);
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -142,15 +209,19 @@
         }
 
         button:hover {
-            background-color: var(--accent-hover);
             transform: translateY(-1px);
+            box-shadow: var(--shadow-card);
+        }
+
+        button:active {
+            transform: translateY(0);
         }
 
         .btn-board {
             background-color: var(--board-green);
         }
         .btn-board:hover {
-            background-color: #21867a;
+            background-color: var(--board-green-hover);
         }
 
         .btn-share {
@@ -164,18 +235,18 @@
             background-color: var(--board-orange);
         }
         .btn-letter:hover {
-            background-color: #d65a3d;
+            background-color: var(--board-orange-hover);
         }
 
         .btn-print {
             background-color: var(--primary);
         }
         .btn-print:hover {
-            background-color: #14364d;
+            background-color: var(--primary-light);
         }
 
-        .btn-secondary { background-color: #6c757d; }
-        .btn-secondary:hover { background-color: #5a6268; }
+        .btn-secondary { background-color: #64748b; }
+        .btn-secondary:hover { background-color: #475569; }
 
         .btn-danger { background-color: var(--danger); }
         .btn-danger:hover { background-color: var(--danger-hover); }
@@ -184,16 +255,20 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            font-size: 0.85em;
+            font-size: 0.84em;
             font-weight: 600;
-            color: #4a5568;
+            color: #475569;
             text-transform: none;
             cursor: pointer;
             background: #f8fafc;
             border: 1px solid var(--border);
             padding: 8px 12px;
-            border-radius: 8px;
+            border-radius: var(--radius-sm);
             user-select: none;
+            transition: background 0.15s ease;
+        }
+        .print-lgr-toggle:hover {
+            background: #f1f5f9;
         }
         .print-lgr-toggle input {
             margin: 0;
@@ -202,103 +277,156 @@
             cursor: pointer;
         }
 
+        /* Sektionstitlar */
         .section-title {
-            background-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
             color: white;
             padding: 10px 18px;
-            border-radius: 8px;
-            margin-top: 30px;
-            margin-bottom: 18px;
-            font-size: 1.1em;
-            font-weight: 600;
+            border-radius: var(--radius-sm);
+            margin-top: 32px;
+            margin-bottom: 20px;
+            font-size: 1.05em;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: -0.01em;
+            box-shadow: var(--shadow-subtle);
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-            gap: 18px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
         }
 
         .card {
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 18px;
-            background-color: #f8fafc;
+            border-radius: var(--radius-md);
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: var(--shadow-subtle);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            border-color: var(--border-hover);
+            box-shadow: var(--shadow-card);
         }
 
         .card h3 {
             margin-top: 0;
             color: var(--primary);
             border-bottom: 2px solid var(--secondary);
-            padding-bottom: 8px;
+            padding-bottom: 10px;
             font-size: 1.15em;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .form-group { margin-bottom: 14px; }
 
         label {
             display: block;
-            font-size: 0.85em;
+            font-size: 0.78em;
             font-weight: 700;
-            margin-bottom: 5px;
-            color: #4a5568;
+            margin-bottom: 6px;
+            color: var(--text-muted);
             text-transform: uppercase;
+            letter-spacing: 0.04em;
         }
 
-        select, input, textarea {
+        select, input[type="text"], input[type="number"], textarea {
             width: 100%;
             padding: 9px 12px;
             border: 1px solid var(--border);
-            border-radius: 6px;
+            border-radius: 8px;
             box-sizing: border-box;
+            font-family: inherit;
             font-size: 0.9em;
             background-color: #ffffff;
             color: var(--text-dark);
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
         }
 
+        select {
+            padding-right: 34px;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%2364748b' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 20px;
+            cursor: pointer;
+        }
+
+        select:focus, input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+        }
+
+        /* Moderna grupp-chips istället för vanliga kryssrutor */
         .checkbox-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            display: flex;
+            flex-wrap: wrap;
             gap: 6px;
-            background: #ffffff;
+            background: #f8fafc;
             padding: 10px;
             border: 1px solid var(--border);
-            border-radius: 6px;
-            max-height: 130px;
+            border-radius: 8px;
+            max-height: 140px;
             overflow-y: auto;
         }
 
         .checkbox-group label {
-            font-weight: 500;
-            font-size: 0.85em;
-            display: flex;
+            font-weight: 600;
+            font-size: 0.82em;
+            display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
             margin: 0;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            color: #475569;
             cursor: pointer;
             text-transform: none;
+            transition: all 0.15s ease;
+            user-select: none;
+        }
+
+        .checkbox-group label:has(input:checked) {
+            background: #e0f2fe;
+            border-color: #7dd3fc;
+            color: #0369a1;
+            font-weight: 700;
         }
 
         .checkbox-group input { width: auto; accent-color: var(--primary); }
 
         .lgr-box {
-            background-color: #eef7fc;
-            border-left: 4px solid var(--accent);
-            padding: 10px;
-            font-size: 0.85em;
-            color: #2b4c6f;
+            background-color: #f0fdfa;
+            border-left: 4px solid var(--board-green);
+            padding: 10px 12px;
+            font-size: 0.84em;
+            color: #134e4a;
             margin-top: 6px;
             min-height: 48px;
-            border-radius: 0 6px 6px 0;
-            line-height: 1.4;
+            border-radius: 0 8px 8px 0;
+            line-height: 1.45;
         }
 
         .bakis-extra { display: none; margin-top: 8px; }
 
-        /* SKÄRM / INFOTAVLA STILAR */
+        /* ==========================================================
+           SKÄRM / INFOTAVLA STILAR (SMARTBOARD / ELEVTAVLA)
+           ========================================================== */
         #board-view {
             background: #ffffff;
-            border-radius: 16px;
+            border-radius: var(--radius-lg);
             padding: 4px;
         }
 
@@ -334,10 +462,15 @@
         .board-title {
             margin: 0;
             font-size: 1.5em;
+            font-weight: 800;
             color: var(--primary);
             text-align: center;
             flex: 1;
             min-width: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .board-actions {
@@ -351,19 +484,22 @@
             justify-content: space-between;
             align-items: center;
             gap: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 22px;
             flex-wrap: wrap;
         }
 
         .board-period-badge {
-            background: #e0f2fe;
-            color: #0369a1;
+            background: #f0fdf4;
+            color: #166534;
             font-weight: 700;
-            font-size: 1em;
-            padding: 8px 16px;
+            font-size: 0.95em;
+            padding: 7px 16px;
             border-radius: 20px;
-            border: 1px solid #bae6fd;
+            border: 1px solid #bbf7d0;
             white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .board-tabs {
@@ -384,6 +520,9 @@
             box-shadow: none;
             transition: all 0.15s ease;
             white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .board-tab:hover {
@@ -396,7 +535,7 @@
             background: var(--primary);
             color: white;
             border-color: var(--primary);
-            box-shadow: 0 2px 6px rgba(27, 73, 101, 0.25);
+            box-shadow: 0 2px 8px rgba(15, 43, 72, 0.25);
         }
 
         /* Dagsvy på infotavlan */
@@ -405,32 +544,38 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
+            from { opacity: 0; transform: translateY(4px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .board-day-header {
-            background: linear-gradient(135deg, #1b4965, #2a9d8f);
+            background: linear-gradient(135deg, var(--primary), #1e40af);
             color: white;
-            border-radius: 12px;
-            padding: 16px 22px;
-            margin-bottom: 20px;
+            border-radius: var(--radius-md);
+            padding: 18px 24px;
+            margin-bottom: 22px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 10px;
+            box-shadow: var(--shadow-card);
         }
 
         .board-day-header h3 {
             margin: 0;
-            font-size: 1.5em;
+            color: white;
+            font-size: 1.55em;
             font-weight: 800;
-            letter-spacing: 0.5px;
+            letter-spacing: -0.01em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .board-day-header .board-day-tag {
-            background: rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(4px);
             padding: 6px 14px;
             border-radius: 20px;
             font-size: 0.85em;
@@ -440,86 +585,90 @@
 
         .board-cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 22px;
         }
 
         .board-big-card {
-            background: #f8fafc;
-            border: 2px solid #e2e8f0;
-            border-radius: 14px;
-            padding: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-card);
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 16px;
             box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
         }
 
         .board-big-card.halvklass-card {
-            border-top: 6px solid #62b6cb;
+            border-top: 5px solid var(--board-green);
         }
 
         .board-big-card.afternoon-card {
-            border-top: 6px solid #e76f51;
+            border-top: 5px solid var(--board-orange);
         }
 
         .board-card-badge {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            font-size: 0.8em;
+            font-size: 0.78em;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.05em;
             padding: 5px 12px;
             border-radius: 6px;
             width: fit-content;
         }
 
         .badge-halvklass {
-            background: #e0f2fe;
-            color: #0369a1;
+            background: #f0fdfa;
+            color: #0d9488;
+            border: 1px solid #ccfbf1;
         }
 
         .badge-afternoon {
-            background: #ffedd5;
+            background: #fff7ed;
             color: #c2410c;
+            border: 1px solid #ffedd5;
         }
 
         .board-activity-name {
-            font-size: 1.5em;
+            font-size: 1.55em;
             font-weight: 800;
             color: var(--primary);
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
             line-height: 1.25;
             word-break: break-word;
         }
 
-        .board-activity-icon {
-            font-size: 1.4em;
-            background: white;
-            width: 50px;
-            height: 50px;
+        .board-activity-icon-box {
+            width: 52px;
+            height: 52px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-subtle);
             flex-shrink: 0;
+            font-size: 1.45em;
         }
 
         .board-groups-box {
-            margin-top: 4px;
+            margin-top: 2px;
         }
 
         .board-groups-label {
-            font-size: 0.8em;
+            font-size: 0.78em;
             font-weight: 700;
-            color: #64748b;
+            color: var(--text-muted);
             text-transform: uppercase;
+            letter-spacing: 0.04em;
             margin-bottom: 8px;
         }
 
@@ -534,13 +683,15 @@
             font-weight: 700;
             padding: 6px 14px;
             border-radius: 20px;
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .board-teacher-info {
-            font-size: 1em;
+            font-size: 0.95em;
             color: #334155;
-            background: #ffffff;
+            background: #f8fafc;
             padding: 10px 14px;
             border-radius: 8px;
             border: 1px solid #e2e8f0;
@@ -551,13 +702,16 @@
         }
 
         .board-extra-note {
-            background: #fef9c3;
-            border: 1px solid #fde047;
+            background: #fefce8;
+            border: 1px solid #fef08a;
             color: #854d0e;
             padding: 12px 14px;
             border-radius: 8px;
-            font-size: 0.95em;
+            font-size: 0.92em;
             line-height: 1.4;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
         }
 
         /* Veckovy på infotavlan */
@@ -579,29 +733,35 @@
         }
 
         .board-week-col {
-            background: #f8fafc;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: var(--radius-md);
             padding: 12px;
             display: flex;
             flex-direction: column;
             gap: 10px;
+            box-shadow: var(--shadow-subtle);
+            transition: all 0.15s ease;
         }
 
         .board-week-col.is-today {
             border-color: var(--board-green);
-            box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.25);
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.2);
             background: #ffffff;
         }
 
         .board-col-header {
             text-align: center;
             padding: 8px;
-            background: #e2e8f0;
+            background: #f1f5f9;
             border-radius: 8px;
             font-weight: 800;
             color: var(--primary);
-            font-size: 1.05em;
+            font-size: 1em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
         }
 
         .board-week-col.is-today .board-col-header {
@@ -610,7 +770,7 @@
         }
 
         .board-col-item {
-            background: white;
+            background: #f8fafc;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
             padding: 10px;
@@ -643,7 +803,10 @@
 
         .board-col-teacher {
             font-size: 0.8em;
-            color: #64748b;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .board-empty-state {
@@ -651,8 +814,8 @@
             padding: 40px 20px;
             background: #f8fafc;
             border: 2px dashed #cbd5e1;
-            border-radius: 12px;
-            color: #64748b;
+            border-radius: var(--radius-md);
+            color: var(--text-muted);
             font-size: 1.1em;
         }
 
@@ -663,8 +826,8 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(4px);
+            background: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(6px);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -675,19 +838,20 @@
 
         .modal-content {
             background: white;
-            border-radius: 14px;
+            border-radius: var(--radius-lg);
             width: 100%;
             max-width: 620px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-            padding: 24px;
-            animation: modalFadeIn 0.2s ease-out;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            padding: 26px;
+            animation: modalFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
             box-sizing: border-box;
             max-height: 90vh;
             overflow-y: auto;
+            border: 1px solid var(--border);
         }
 
         @keyframes modalFadeIn {
-            from { opacity: 0; transform: scale(0.96); }
+            from { opacity: 0; transform: scale(0.97); }
             to { opacity: 1; transform: scale(1); }
         }
 
@@ -695,24 +859,30 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
         }
 
         .modal-header h3 {
             margin: 0;
             color: var(--primary);
             font-size: 1.25em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .modal-close-btn {
             background: none;
             border: none;
-            font-size: 1.4em;
+            font-size: 1.3em;
             color: #64748b;
             cursor: pointer;
             box-shadow: none;
-            padding: 2px 8px;
+            padding: 4px 8px;
             border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .modal-close-btn:hover {
@@ -723,17 +893,17 @@
 
         .modal-intro {
             font-size: 0.9em;
-            color: #475569;
+            color: var(--text-muted);
             margin-top: 0;
-            margin-bottom: 14px;
-            line-height: 1.45;
+            margin-bottom: 16px;
+            line-height: 1.5;
         }
 
         .modal-footer {
             display: flex;
             justify-content: flex-end;
             gap: 10px;
-            margin-top: 16px;
+            margin-top: 18px;
         }
 
         /* Toast-avisering */
@@ -742,12 +912,12 @@
             bottom: 25px;
             left: 50%;
             transform: translateX(-50%);
-            background: #1e293b;
+            background: #0f172a;
             color: white;
             padding: 12px 24px;
             border-radius: 30px;
             font-weight: 600;
-            font-size: 0.95em;
+            font-size: 0.92em;
             box-shadow: 0 10px 25px rgba(0,0,0,0.25);
             z-index: 2000;
             display: flex;
@@ -770,17 +940,17 @@
            ========================================================== */
         @media (max-width: 640px) {
             body {
-                padding: 8px;
+                padding: 10px;
             }
 
             .container {
-                padding: 14px;
+                padding: 16px;
                 border-radius: 12px;
             }
 
-            h1 {
+            .app-header h1 {
                 font-size: 1.45em;
-                margin-bottom: 14px;
+                margin-bottom: 12px;
             }
 
             .user-status-bar {
@@ -813,8 +983,8 @@
             .actions button, .actions .print-lgr-toggle {
                 flex: 1 1 calc(50% - 6px);
                 min-width: 130px;
-                padding: 10px 8px;
-                font-size: 0.84em;
+                padding: 9px 8px;
+                font-size: 0.82em;
                 justify-content: center;
             }
 
@@ -846,7 +1016,7 @@
 
             .board-actions button {
                 flex: 1 1 auto;
-                font-size: 0.85em;
+                font-size: 0.84em;
                 padding: 8px 12px;
             }
 
@@ -858,8 +1028,9 @@
 
             .board-period-badge {
                 text-align: center;
-                font-size: 0.9em;
+                font-size: 0.88em;
                 padding: 6px 12px;
+                justify-content: center;
             }
 
             /* Horisontell swipe-bar för dagarna */
@@ -888,11 +1059,12 @@
                 flex-direction: column;
                 text-align: center;
                 gap: 6px;
-                padding: 12px 14px;
+                padding: 14px;
             }
 
             .board-day-header h3 {
                 font-size: 1.3em;
+                justify-content: center;
             }
 
             .board-cards-grid {
@@ -901,7 +1073,7 @@
             }
 
             .board-big-card {
-                padding: 16px;
+                padding: 18px;
             }
 
             .board-activity-name {
@@ -909,7 +1081,7 @@
                 gap: 10px;
             }
 
-            .board-activity-icon {
+            .board-activity-icon-box {
                 width: 44px;
                 height: 44px;
                 font-size: 1.2em;
@@ -919,7 +1091,7 @@
         /* Utskrift */
         @media print {
             body { background-color: white !important; padding: 0 !important; color: #000 !important; }
-            .container { box-shadow: none !important; padding: 0 !important; max-width: 100% !important; border-radius: 0 !important; }
+            .container { box-shadow: none !important; padding: 0 !important; max-width: 100% !important; border-radius: 0 !important; border: none !important; }
             .actions, button, .view-section:not(.active), #letter-modal, #share-modal, .header-inputs, .board-topbar, .board-subbar, .user-status-bar, .toast { display: none !important; }
             
             /* Print Header för standardplaneringen */
@@ -942,7 +1114,8 @@
                 color: #475569;
             }
 
-            #app-view.active #app-title { display: none !important; }
+            #app-view.active #app-title,
+            #app-view.active .app-header { display: none !important; }
 
             /* Dölj dropdowns och formulärelement – visa snygg ren text */
             select, .checkbox-group, input { display: none !important; }
@@ -1012,7 +1185,7 @@
             }
 
             .section-title {
-                background-color: var(--primary) !important;
+                background: var(--primary) !important;
                 color: white !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
@@ -1087,8 +1260,8 @@
     <div id="app-view" class="view-section active">
         <!-- Inloggningsstatus bar -->
         <div class="user-status-bar">
-            <span id="user-display"><span class="user-badge">👤 Lokal session</span></span>
-            <a href="index.html">⚙️ Ändra inställningar & inloggning</a>
+            <span id="user-display"><span class="user-badge"><span class="material-symbols-rounded">person</span> Lokal session</span></span>
+            <a href="index.html"><span class="material-symbols-rounded">tune</span> Inställningar & Inloggning</a>
         </div>
 
         <!-- Rubrik vid utskrift -->
@@ -1097,66 +1270,104 @@
             <p id="print-header-sub">Vecka --</p>
         </div>
 
-        <h1 id="app-title">Veckoplanering Fritidshemmet</h1>
+        <div class="app-header">
+            <h1 id="app-title"><span class="material-symbols-rounded" style="color: var(--board-green);">calendar_month</span> Veckoplanering Fritidshemmet</h1>
+        </div>
 
         <!-- FÄLT FÖR VECKA OCH DATUM -->
         <div class="header-inputs">
             <div class="form-group">
-                <label for="week-num">Vecka:</label>
+                <label for="week-num"><span class="material-symbols-rounded">date_range</span> Vecka:</label>
                 <input type="number" id="week-num" placeholder="t.ex. 40" style="width: 80px;" oninput="saveAllData()">
             </div>
             <div class="form-group">
-                <label for="date-range">Datum / Period:</label>
+                <label for="date-range"><span class="material-symbols-rounded">event</span> Datum / Period:</label>
                 <input type="text" id="date-range" placeholder="t.ex. 29 sep - 3 okt" style="width: 220px;" oninput="saveAllData()">
             </div>
         </div>
 
         <div class="actions">
-            <button type="button" class="btn-board" onclick="showBoardView()">📺 Infotavla för elever</button>
-            <button type="button" class="btn-share" onclick="shareInfotavla()">📲 Dela med kollegor</button>
-            <button type="button" class="btn-letter" onclick="openParentLetterModal()">📝 Veckobrev till föräldrar</button>
-            <button type="button" class="btn-print" onclick="prepareAndPrint()">🖨️ Skriv ut / PDF</button>
+            <button type="button" class="btn-board" onclick="showBoardView()">
+                <span class="material-symbols-rounded">co_present</span> Elevtavla
+            </button>
+            <button type="button" class="btn-share" onclick="shareInfotavla()">
+                <span class="material-symbols-rounded">share</span> Dela tavla
+            </button>
+            <button type="button" class="btn-letter" onclick="openParentLetterModal()">
+                <span class="material-symbols-rounded">mark_email_read</span> Veckobrev
+            </button>
+            <button type="button" class="btn-print" onclick="prepareAndPrint()">
+                <span class="material-symbols-rounded">print</span> Skriv ut / PDF
+            </button>
             <label class="print-lgr-toggle" title="Välj om Lgr22-mål ska inkluderas på utskriften eller döljas för ett renare elevschema">
-                <input type="checkbox" id="print-include-lgr" checked> Inkludera Lgr22
+                <input type="checkbox" id="print-include-lgr" checked>
+                <span class="material-symbols-rounded" style="font-size: 1.1em; color: var(--board-green);">menu_book</span> Inkludera Lgr22
             </label>
-            <button type="button" class="btn-secondary" onclick="goToSettings()">⚙️ Alternativ & Inloggning</button>
-            <button type="button" class="btn-secondary" onclick="exportData()">💾 Exportera fil</button>
-            <button type="button" class="btn-danger" onclick="clearSavedData()">🧹 Rensa</button>
+            <button type="button" class="btn-secondary" onclick="goToSettings()">
+                <span class="material-symbols-rounded">tune</span> Alternativ
+            </button>
+            <button type="button" class="btn-secondary" onclick="exportData()">
+                <span class="material-symbols-rounded">download</span> Exportera
+            </button>
+            <button type="button" class="btn-danger" onclick="clearSavedData()">
+                <span class="material-symbols-rounded">delete_outline</span> Rensa
+            </button>
         </div>
 
         <!-- HALVKLASSER (Dynamiskt) -->
         <div id="halvklass-section">
-            <div class="section-title">Halvklassaktiviteter</div>
+            <div class="section-title">
+                <span class="material-symbols-rounded">backpack</span> Halvklassaktiviteter
+            </div>
             <div class="grid" id="halvklass-container"></div>
         </div>
 
         <!-- EFTERMIDDAGSAKTIVITETER -->
-        <div class="section-title">Eftermiddagsaktiviteter (15:00 - 16:00)</div>
+        <div class="section-title">
+            <span class="material-symbols-rounded">schedule</span> Eftermiddagsaktiviteter (15:00 - 16:00)
+        </div>
         <div class="grid" id="afternoon-container"></div>
     </div>
 
     <!-- INFOTAVLA FÖR ELEVER (SMARTBOARD / SKÄRM) -->
     <div id="board-view" class="view-section">
         <div class="board-topbar">
-            <button type="button" class="btn-secondary" onclick="returnToAppView()">⬅ Tillbaka</button>
-            <h2 class="board-title">🌟 Fritidstavlan: <span id="board-grade-title"></span></h2>
+            <button type="button" class="btn-secondary" onclick="returnToAppView()">
+                <span class="material-symbols-rounded">arrow_back</span> Tillbaka
+            </button>
+            <h2 class="board-title">
+                <span class="material-symbols-rounded" style="color: #f59e0b;">stars</span>
+                <span>Fritidstavlan: <span id="board-grade-title"></span></span>
+            </h2>
             <div class="board-actions">
-                <button type="button" class="btn-share" onclick="shareInfotavla()">📲 Dela tavla</button>
-                <button type="button" id="fullscreen-btn" class="btn-board" onclick="toggleFullScreen()">⛶ Helskärm</button>
-                <button type="button" class="btn-print" onclick="window.print()">🖨️ Skriv ut</button>
+                <button type="button" class="btn-share" onclick="shareInfotavla()">
+                    <span class="material-symbols-rounded">share</span> Dela tavla
+                </button>
+                <button type="button" id="fullscreen-btn" class="btn-board" onclick="toggleFullScreen()">
+                    <span class="material-symbols-rounded">fullscreen</span> Helskärm
+                </button>
+                <button type="button" class="btn-print" onclick="window.print()">
+                    <span class="material-symbols-rounded">print</span> Skriv ut
+                </button>
             </div>
         </div>
 
         <div class="board-subbar">
-            <div class="board-period-badge" id="board-period-badge">Vecka --</div>
+            <div class="board-period-badge" id="board-period-badge">
+                <span class="material-symbols-rounded">calendar_today</span> Vecka --
+            </div>
             <div class="board-tabs" id="board-tabs">
-                <button type="button" class="board-tab active" data-day="idag" onclick="switchBoardTab('idag')">🌟 Idag</button>
+                <button type="button" class="board-tab active" data-day="idag" onclick="switchBoardTab('idag')">
+                    <span class="material-symbols-rounded" style="color: #f59e0b;">today</span> Idag
+                </button>
                 <button type="button" class="board-tab" data-day="måndag" onclick="switchBoardTab('måndag')">Måndag</button>
                 <button type="button" class="board-tab" data-day="tisdag" onclick="switchBoardTab('tisdag')">Tisdag</button>
                 <button type="button" class="board-tab" data-day="onsdag" onclick="switchBoardTab('onsdag')">Onsdag</button>
                 <button type="button" class="board-tab" data-day="torsdag" onclick="switchBoardTab('torsdag')">Torsdag</button>
                 <button type="button" class="board-tab" data-day="fredag" onclick="switchBoardTab('fredag')">Fredag</button>
-                <button type="button" class="board-tab" data-day="vecka" onclick="switchBoardTab('vecka')">📅 Hela veckan</button>
+                <button type="button" class="board-tab" data-day="vecka" onclick="switchBoardTab('vecka')">
+                    <span class="material-symbols-rounded">date_range</span> Hela veckan
+                </button>
             </div>
         </div>
 
@@ -1170,15 +1381,17 @@
 <div id="letter-modal" class="modal-overlay" style="display: none;">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>📝 Veckobrev för vårdnadshavare</h3>
-            <button type="button" class="modal-close-btn" onclick="closeParentLetterModal()" title="Stäng">✕</button>
+            <h3><span class="material-symbols-rounded" style="color: var(--board-orange);">mark_email_read</span> Veckobrev för vårdnadshavare</h3>
+            <button type="button" class="modal-close-btn" onclick="closeParentLetterModal()" title="Stäng"><span class="material-symbols-rounded">close</span></button>
         </div>
         <p class="modal-intro">
             Denna text genereras automatiskt från veckoplaneringen. Du kan redigera texten fritt nedan och sedan kopiera den direkt till <strong>Unikum, SchoolSoft, Vklass</strong> eller e-post.
         </p>
         <textarea id="letter-text" rows="13" style="width: 100%; font-family: inherit; font-size: 0.95em; line-height: 1.5; padding: 12px; border-radius: 8px; border: 1px solid var(--border); box-sizing: border-box; resize: vertical;"></textarea>
         <div class="modal-footer">
-            <button type="button" id="copy-letter-btn" class="btn-board" style="font-size: 1em; padding: 10px 22px;" onclick="copyLetterText()">📋 Kopiera till urklipp</button>
+            <button type="button" id="copy-letter-btn" class="btn-board" style="font-size: 0.95em; padding: 10px 20px;" onclick="copyLetterText()">
+                <span class="material-symbols-rounded">content_copy</span> Kopiera till urklipp
+            </button>
             <button type="button" class="btn-secondary" onclick="closeParentLetterModal()">Stäng</button>
         </div>
     </div>
@@ -1188,25 +1401,33 @@
 <div id="share-modal" class="modal-overlay" style="display: none;">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>📲 Dela med kollegor</h3>
-            <button type="button" class="modal-close-btn" onclick="closeShareModal()" title="Stäng">✕</button>
+            <h3><span class="material-symbols-rounded" style="color: var(--share-purple);">share</span> Dela med kollegor</h3>
+            <button type="button" class="modal-close-btn" onclick="closeShareModal()" title="Stäng"><span class="material-symbols-rounded">close</span></button>
         </div>
         <p class="modal-intro">
             Skicka länken nedan till dina kollegor via <strong>Teams, WhatsApp, SMS eller mejl</strong>. När de klickar på länken öppnas Infotavlan direkt på deras mobil eller dator!
         </p>
 
         <div class="form-group">
-            <label for="share-url-input">Direktlänk till Infotavlan:</label>
+            <label for="share-url-input"><span class="material-symbols-rounded">link</span> Direktlänk till Infotavlan:</label>
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                 <input type="text" id="share-url-input" readonly onclick="this.select()" style="flex: 1; min-width: 200px; font-size: 0.85em; background: #f8fafc; font-family: monospace;">
-                <button type="button" id="copy-share-btn" class="btn-share" style="white-space: nowrap; padding: 9px 16px;" onclick="copyShareUrl()">📋 Kopiera länk</button>
+                <button type="button" id="copy-share-btn" class="btn-share" style="white-space: nowrap; padding: 9px 16px;" onclick="copyShareUrl()">
+                    <span class="material-symbols-rounded">content_copy</span> Kopiera länk
+                </button>
             </div>
         </div>
 
         <div style="display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap;">
-            <a id="share-whatsapp-btn" href="#" target="_blank" class="btn-board" style="text-decoration: none; padding: 8px 14px; font-size: 0.88em; background-color: #25D366;">💬 WhatsApp</a>
-            <a id="share-email-btn" href="#" class="btn-secondary" style="text-decoration: none; padding: 8px 14px; font-size: 0.88em;">✉️ E-post</a>
-            <button type="button" class="btn-letter" style="font-size: 0.88em; padding: 8px 14px;" onclick="copyDaySummaryText()">📝 Kopiera dagens text</button>
+            <a id="share-whatsapp-btn" href="#" target="_blank" class="btn-board" style="text-decoration: none; padding: 8px 14px; font-size: 0.88em; background-color: #25D366;">
+                💬 WhatsApp
+            </a>
+            <a id="share-email-btn" href="#" class="btn-secondary" style="text-decoration: none; padding: 8px 14px; font-size: 0.88em;">
+                <span class="material-symbols-rounded" style="font-size: 1.1em;">mail</span> E-post
+            </a>
+            <button type="button" class="btn-letter" style="font-size: 0.88em; padding: 8px 14px;" onclick="copyDaySummaryText()">
+                <span class="material-symbols-rounded" style="font-size: 1.1em;">chat</span> Kopiera dagens text
+            </button>
         </div>
 
         <div class="modal-footer">
@@ -1272,32 +1493,55 @@
             .replace(/'/g, "&#039;");
     }
 
-    function getActivityIcon(name) {
-        if (!name) return "📋";
+    /* Returnerar både Google Material Symbol och Google Noto Emoji */
+    function getActivityIconData(name) {
+        if (!name) return { icon: "assignment", emoji: "📋", color: "#64748b", bg: "#f1f5f9" };
         const lower = name.toLowerCase();
-        if (lower.includes("skapande") || lower.includes("bild") || lower.includes("pyssel") || lower.includes("måla") || lower.includes("lera")) return "🎨";
-        if (lower.includes("ute") || lower.includes("natur") || lower.includes("skog") || lower.includes("park") || lower.includes("äventyr")) return "🌲";
-        if (lower.includes("gympa") || lower.includes("idrott") || lower.includes("sport") || lower.includes("boll") || lower.includes("bad")) return "⚽";
-        if (lower.includes("bakis") || lower.includes("samarbete") || lower.includes("lek") || lower.includes("hinderbana")) return "🤝";
-        if (lower.includes("värdegrund") || lower.includes("relation") || lower.includes("kamrat") || lower.includes("trygghet")) return "💛";
-        if (lower.includes("film") || lower.includes("bio")) return "🎬";
-        if (lower.includes("musik") || lower.includes("dans") || lower.includes("sång") || lower.includes("disco")) return "🎵";
-        if (lower.includes("spel") || lower.includes("lego") || lower.includes("bygge") || lower.includes("konstruktion")) return "🎲";
-        if (lower.includes("baka") || lower.includes("mat") || lower.includes("mellis") || lower.includes("frukt")) return "🍎";
-        if (lower.includes("läs") || lower.includes("bok") || lower.includes("vila") || lower.includes("saga")) return "📚";
-        if (lower.includes("digital") || lower.includes("programmering") || lower.includes("robot")) return "💻";
-        return "⭐";
+        if (lower.includes("skapande") || lower.includes("bild") || lower.includes("pyssel") || lower.includes("måla") || lower.includes("lera")) {
+            return { icon: "palette", emoji: "🎨", color: "#ea580c", bg: "#ffedd5" };
+        }
+        if (lower.includes("ute") || lower.includes("natur") || lower.includes("skog") || lower.includes("park") || lower.includes("äventyr")) {
+            return { icon: "forest", emoji: "🌲", color: "#15803d", bg: "#dcfce7" };
+        }
+        if (lower.includes("gympa") || lower.includes("idrott") || lower.includes("sport") || lower.includes("boll") || lower.includes("bad")) {
+            return { icon: "sports_soccer", emoji: "⚽", color: "#0284c7", bg: "#e0f2fe" };
+        }
+        if (lower.includes("bakis") || lower.includes("samarbete") || lower.includes("lek") || lower.includes("hinderbana")) {
+            return { icon: "handshake", emoji: "🤝", color: "#7c3aed", bg: "#ede9fe" };
+        }
+        if (lower.includes("värdegrund") || lower.includes("relation") || lower.includes("kamrat") || lower.includes("trygghet")) {
+            return { icon: "favorite", emoji: "💛", color: "#e11d48", bg: "#ffe4e6" };
+        }
+        if (lower.includes("film") || lower.includes("bio")) {
+            return { icon: "movie", emoji: "🎬", color: "#4f46e5", bg: "#e0e7ff" };
+        }
+        if (lower.includes("musik") || lower.includes("dans") || lower.includes("sång") || lower.includes("disco")) {
+            return { icon: "music_note", emoji: "🎵", color: "#c026d3", bg: "#fae8ff" };
+        }
+        if (lower.includes("spel") || lower.includes("lego") || lower.includes("bygge") || lower.includes("konstruktion")) {
+            return { icon: "extension", emoji: "🎲", color: "#0891b2", bg: "#cffafe" };
+        }
+        if (lower.includes("baka") || lower.includes("mat") || lower.includes("mellis") || lower.includes("frukt")) {
+            return { icon: "restaurant", emoji: "🍎", color: "#b91c1c", bg: "#fee2e2" };
+        }
+        if (lower.includes("läs") || lower.includes("bok") || lower.includes("vila") || lower.includes("saga")) {
+            return { icon: "menu_book", emoji: "📚", color: "#0d9488", bg: "#ccfbf1" };
+        }
+        if (lower.includes("digital") || lower.includes("programmering") || lower.includes("robot")) {
+            return { icon: "smart_toy", emoji: "💻", color: "#2563eb", bg: "#dbeafe" };
+        }
+        return { icon: "star", emoji: "⭐", color: "#d97706", bg: "#fef3c7" };
     }
 
     function getGroupBadgeStyle(name) {
         const lower = name.toLowerCase();
-        if (lower.includes("gul")) return "background-color: #fef08a; color: #854d0e; border: 1px solid #fde047;";
+        if (lower.includes("gul")) return "background-color: #fef9c3; color: #854d0e; border: 1px solid #fde047;";
         if (lower.includes("röd")) return "background-color: #fee2e2; color: #991b1b; border: 1px solid #fca5a5;";
         if (lower.includes("grön")) return "background-color: #dcfce7; color: #166534; border: 1px solid #86efac;";
         if (lower.includes("blå")) return "background-color: #dbeafe; color: #1e40af; border: 1px solid #93c5fd;";
         if (lower.includes("lila")) return "background-color: #f3e8ff; color: #6b21a8; border: 1px solid #d8b4fe;";
         if (lower.includes("loket")) return "background-color: #ffedd5; color: #9a3412; border: 1px solid #fdba74;";
-        return "background-color: #e2e8f0; color: #1e293b; border: 1px solid #cbd5e1;";
+        return "background-color: #f1f5f9; color: #1e293b; border: 1px solid #cbd5e1;";
     }
 
     function getTodayDayName() {
@@ -1382,7 +1626,6 @@
         saveAllData();
         const data = getPlanningData();
 
-        // Skapa ett kompakt delningspaket
         const payload = {
             c: appConfig,
             p: {
@@ -1419,7 +1662,6 @@
         const title = `Fritidstavlan: ${appConfig.grade} (v. ${data.weekNum || ''})`;
         const text = `Här är veckans planering och Infotavla för ${appConfig.grade}!`;
 
-        // Använd native Web Share API på mobiler (iPhone / Android)
         if (navigator.share) {
             navigator.share({
                 title: title,
@@ -1441,7 +1683,6 @@
         const shareUrl = url || generateShareUrl(true);
         document.getElementById('share-url-input').value = shareUrl;
         
-        // Uppdatera snabblänkar
         const data = getPlanningData();
         const msg = encodeURIComponent(`Hej! Här är veckans Fritidstavla för ${appConfig.grade}: ${shareUrl}`);
         document.getElementById('share-whatsapp-btn').href = `https://api.whatsapp.com/send?text=${msg}`;
@@ -1449,7 +1690,7 @@
         
         document.getElementById('share-modal').style.display = 'flex';
         const copyBtn = document.getElementById('copy-share-btn');
-        copyBtn.textContent = '📋 Kopiera länk';
+        copyBtn.innerHTML = '<span class="material-symbols-rounded">content_copy</span> Kopiera länk';
         copyBtn.style.backgroundColor = 'var(--share-purple)';
     }
 
@@ -1464,21 +1705,21 @@
 
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(input.value).then(() => {
-                copyBtn.textContent = '✅ Kopierat!';
+                copyBtn.innerHTML = '<span class="material-symbols-rounded">check</span> Kopierat!';
                 copyBtn.style.backgroundColor = '#10b981';
                 showToast("✅ Länk kopierad till urklipp!");
                 setTimeout(() => {
-                    copyBtn.textContent = '📋 Kopiera länk';
+                    copyBtn.innerHTML = '<span class="material-symbols-rounded">content_copy</span> Kopiera länk';
                     copyBtn.style.backgroundColor = 'var(--share-purple)';
                 }, 3000);
             });
         } else {
             document.execCommand('copy');
-            copyBtn.textContent = '✅ Kopierat!';
+            copyBtn.innerHTML = '<span class="material-symbols-rounded">check</span> Kopierat!';
             copyBtn.style.backgroundColor = '#10b981';
             showToast("✅ Länk kopierad!");
             setTimeout(() => {
-                copyBtn.textContent = '📋 Kopiera länk';
+                copyBtn.innerHTML = '<span class="material-symbols-rounded">content_copy</span> Kopiera länk';
                 copyBtn.style.backgroundColor = 'var(--share-purple)';
             }, 3000);
         }
@@ -1555,7 +1796,7 @@
 
     /* --- BYGG APPGUIN --- */
     function buildAppUI() {
-        document.getElementById('app-title').textContent = `Veckoplanering Fritidshemmet ${appConfig.grade}`;
+        document.getElementById('app-title').innerHTML = `<span class="material-symbols-rounded" style="color: var(--board-green);">calendar_month</span> Veckoplanering Fritidshemmet ${escapeHtml(appConfig.grade)}`;
         if (document.getElementById('print-header-title')) {
             document.getElementById('print-header-title').textContent = `Veckoplanering Fritidshemmet – ${appConfig.grade}`;
         }
@@ -1576,21 +1817,21 @@
                 card.className = 'card';
                 card.setAttribute('data-id', `halvklass-${idx}`);
                 card.innerHTML = `
-                    <h3>${dayName} – Halvklass</h3>
+                    <h3><span class="material-symbols-rounded" style="color: var(--accent);">backpack</span> ${dayName} – Halvklass</h3>
                     <div class="form-group">
-                        <label>Aktivitet</label>
+                        <label><span class="material-symbols-rounded" style="font-size: 1.1em;">palette</span> Aktivitet</label>
                         <select class="activity-select" onchange="updateLgr(this); saveAllData();"><option value="">Välj aktivitet...</option></select>
                     </div>
                     <div class="form-group bakis-extra">
-                        <label>Specifik samarbetsövning</label>
+                        <label><span class="material-symbols-rounded" style="font-size: 1.1em; color: #d97706;">lightbulb</span> Specifik samarbetsövning</label>
                         <input type="text" class="bakis-input" oninput="saveAllData()" placeholder="t.ex. Knopen, Stafett...">
                     </div>
                     <div class="form-group">
-                        <label>Ansvarig pedagog</label>
+                        <label><span class="material-symbols-rounded" style="font-size: 1.1em;">person</span> Ansvarig pedagog</label>
                         <select class="teacher-select" onchange="saveAllData()"><option value="">Välj ansvarig...</option></select>
                     </div>
                     <div class="form-group lgr-group">
-                        <label>Lgr22 Koppling</label>
+                        <label><span class="material-symbols-rounded" style="font-size: 1.1em; color: var(--board-green);">menu_book</span> Lgr22 Koppling</label>
                         <div class="lgr-box">Välj aktivitet för att se mål...</div>
                     </div>
                 `;
@@ -1622,25 +1863,25 @@
             checkboxesHtml += `</div>`;
 
             card.innerHTML = `
-                <h3>${dayObj.name}</h3>
+                <h3><span class="material-symbols-rounded" style="color: var(--board-orange);">event</span> ${dayObj.name}</h3>
                 <div class="form-group">
-                    <label>Deltagande grupper (kryssa för alla som deltar)</label>
+                    <label><span class="material-symbols-rounded" style="font-size: 1.1em;">group</span> Deltagande grupper (kryssa för alla som deltar)</label>
                     ${checkboxesHtml}
                 </div>
                 <div class="form-group">
-                    <label>Aktivitet</label>
+                    <label><span class="material-symbols-rounded" style="font-size: 1.1em;">palette</span> Aktivitet</label>
                     <select class="activity-select" onchange="updateLgr(this); saveAllData();"><option value="">Välj aktivitet...</option></select>
                 </div>
                 <div class="form-group bakis-extra">
-                    <label>Specifik samarbetsövning</label>
+                    <label><span class="material-symbols-rounded" style="font-size: 1.1em; color: #d97706;">lightbulb</span> Specifik samarbetsövning</label>
                     <input type="text" class="bakis-input" oninput="saveAllData()" placeholder="t.ex. Knopen, Stafett...">
                 </div>
                 <div class="form-group">
-                    <label>Ansvarig pedagog</label>
+                    <label><span class="material-symbols-rounded" style="font-size: 1.1em;">person</span> Ansvarig pedagog</label>
                     <select class="teacher-select" onchange="saveAllData()"><option value="">Välj ansvarig...</option></select>
                 </div>
                 <div class="form-group lgr-group">
-                    <label>Lgr22 Koppling</label>
+                    <label><span class="material-symbols-rounded" style="font-size: 1.1em; color: var(--board-green);">menu_book</span> Lgr22 Koppling</label>
                     <div class="lgr-box">Välj aktivitet för att se mål...</div>
                 </div>
             `;
@@ -1661,7 +1902,10 @@
     function populateSelects(container) {
         container.querySelectorAll('.activity-select').forEach(sel => {
             if(sel.options.length <= 1) {
-                appConfig.activitiesList.forEach(actObj => sel.add(new Option(actObj.name, actObj.name)));
+                appConfig.activitiesList.forEach(actObj => {
+                    const iconData = getActivityIconData(actObj.name);
+                    sel.add(new Option(`${iconData.emoji} ${actObj.name}`, actObj.name));
+                });
             }
         });
         container.querySelectorAll('.teacher-select').forEach(sel => {
@@ -1779,7 +2023,7 @@
         const plan = [];
 
         document.querySelectorAll('.card').forEach(card => {
-            const title = card.querySelector('h3').textContent;
+            const title = card.querySelector('h3').textContent.trim();
             const checkedGroups = Array.from(card.querySelectorAll('.checkbox-group input:checked')).map(cb => cb.value);
             const activity = card.querySelector('.activity-select').value;
             const bakisExercise = card.querySelector('.bakis-input') ? card.querySelector('.bakis-input').value : "";
@@ -1824,7 +2068,7 @@
         let periodText = "";
         if (weekNum) periodText += `Vecka ${weekNum}`;
         if (dateRange) periodText += (periodText ? " • " : "") + dateRange;
-        document.getElementById('board-period-badge').textContent = periodText || "Aktuell planering";
+        document.getElementById('board-period-badge').innerHTML = `<span class="material-symbols-rounded">calendar_today</span> ${periodText || "Aktuell planering"}`;
 
         currentBoardTab = "idag";
         document.querySelectorAll('.board-tab').forEach(b => {
@@ -1859,9 +2103,9 @@
         const btn = document.getElementById('fullscreen-btn');
         if (btn) {
             if (document.fullscreenElement) {
-                btn.innerHTML = '🗗 Avsluta';
+                btn.innerHTML = '<span class="material-symbols-rounded">fullscreen_exit</span> Avsluta';
             } else {
-                btn.innerHTML = '⛶ Helskärm';
+                btn.innerHTML = '<span class="material-symbols-rounded">fullscreen</span> Helskärm';
             }
         }
     });
@@ -1886,8 +2130,8 @@
                 container.innerHTML = renderBoardDayView(todayName, true);
             } else {
                 container.innerHTML = `
-                    <div style="background: #fef3c7; border: 1px solid #fcd34d; color: #92400e; padding: 14px 20px; border-radius: 12px; margin-bottom: 20px; font-weight: 600; font-size: 1.05em; text-align: center;">
-                        🏖️ Det är helg! Visar måndagens planering nedan:
+                    <div style="background: #fef3c7; border: 1px solid #fcd34d; color: #92400e; padding: 14px 20px; border-radius: 12px; margin-bottom: 20px; font-weight: 600; font-size: 1.05em; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <span class="material-symbols-rounded" style="color: #d97706;">beach_access</span> Det är helg! Visar måndagens planering nedan:
                     </div>
                     ${renderBoardDayView("Måndag", false)}
                 `;
@@ -1903,7 +2147,7 @@
         const dayInfo = data.days[dayName];
         if (!dayInfo) return `<div class="board-empty-state">Ingen information sparad för ${escapeHtml(dayName)}.</div>`;
 
-        const greeting = isTodayGreeting ? `☀️ Idag är det ${escapeHtml(dayName)}!` : `📅 ${escapeHtml(dayName)}`;
+        const greeting = isTodayGreeting ? `Idag är det ${escapeHtml(dayName)}!` : escapeHtml(dayName);
         const tagText = isTodayGreeting ? "Aktuell dag" : escapeHtml(dayName);
 
         let cardsHtml = "";
@@ -1912,22 +2156,31 @@
         // Halvklasspass
         if (dayInfo.halvklass && dayInfo.halvklass.activity) {
             hasAnyActivity = true;
-            const icon = getActivityIcon(dayInfo.halvklass.activity);
+            const iconData = getActivityIconData(dayInfo.halvklass.activity);
             cardsHtml += `
                 <div class="board-big-card halvklass-card">
-                    <div class="board-card-badge badge-halvklass">🎒 Halvklasspass</div>
+                    <div class="board-card-badge badge-halvklass">
+                        <span class="material-symbols-rounded" style="font-size: 1.2em;">backpack</span> Halvklasspass
+                    </div>
                     <div class="board-activity-name">
-                        <span class="board-activity-icon">${icon}</span>
-                        <span>${escapeHtml(dayInfo.halvklass.activity)}</span>
+                        <div class="board-activity-icon-box" style="background: ${iconData.bg}; color: ${iconData.color};">
+                            <span class="material-symbols-rounded">${iconData.icon}</span>
+                        </div>
+                        <div>
+                            <span>${escapeHtml(dayInfo.halvklass.activity)}</span>
+                            <span class="noto-emoji" style="margin-left: 6px; font-size: 0.9em;">${iconData.emoji}</span>
+                        </div>
                     </div>
                     ${dayInfo.halvklass.teacher ? `
                         <div class="board-teacher-info">
-                            <span>👤</span> <strong>Ansvarig pedagog:</strong> ${escapeHtml(dayInfo.halvklass.teacher)}
+                            <span class="material-symbols-rounded" style="color: var(--accent);">person</span>
+                            <span>Ansvarig pedagog: <strong>${escapeHtml(dayInfo.halvklass.teacher)}</strong></span>
                         </div>
                     ` : ''}
                     ${dayInfo.halvklass.bakis ? `
                         <div class="board-extra-note">
-                            💡 <strong>Dagens utmaning:</strong> ${escapeHtml(dayInfo.halvklass.bakis)}
+                            <span class="material-symbols-rounded" style="color: #d97706;">lightbulb</span>
+                            <div><strong>Dagens utmaning / övning:</strong> ${escapeHtml(dayInfo.halvklass.bakis)}</div>
                         </div>
                     ` : ''}
                 </div>
@@ -1937,23 +2190,30 @@
         // Eftermiddagsaktivitet
         if (dayInfo.afternoon && dayInfo.afternoon.activity) {
             hasAnyActivity = true;
-            const icon = getActivityIcon(dayInfo.afternoon.activity);
+            const iconData = getActivityIconData(dayInfo.afternoon.activity);
             let groupsBadgesHtml = "";
             if (dayInfo.afternoon.groups && dayInfo.afternoon.groups.length > 0) {
                 groupsBadgesHtml = dayInfo.afternoon.groups.map(g => {
                     const style = getGroupBadgeStyle(g);
-                    return `<span class="board-group-tag" style="${style}">${escapeHtml(g)}</span>`;
+                    return `<span class="board-group-tag" style="${style}"><span class="material-symbols-rounded" style="font-size: 1em;">check</span> ${escapeHtml(g)}</span>`;
                 }).join('');
             } else {
-                groupsBadgesHtml = `<span class="board-group-tag" style="background: #e2e8f0; color: #475569;">Alla grupper</span>`;
+                groupsBadgesHtml = `<span class="board-group-tag" style="background: #e2e8f0; color: #475569;">Alla grupper deltar</span>`;
             }
 
             cardsHtml += `
                 <div class="board-big-card afternoon-card">
-                    <div class="board-card-badge badge-afternoon">⏰ Eftermiddag (15:00 - 16:00)</div>
+                    <div class="board-card-badge badge-afternoon">
+                        <span class="material-symbols-rounded" style="font-size: 1.2em;">schedule</span> Eftermiddag (15:00 - 16:00)
+                    </div>
                     <div class="board-activity-name">
-                        <span class="board-activity-icon">${icon}</span>
-                        <span>${escapeHtml(dayInfo.afternoon.activity)}</span>
+                        <div class="board-activity-icon-box" style="background: ${iconData.bg}; color: ${iconData.color};">
+                            <span class="material-symbols-rounded">${iconData.icon}</span>
+                        </div>
+                        <div>
+                            <span>${escapeHtml(dayInfo.afternoon.activity)}</span>
+                            <span class="noto-emoji" style="margin-left: 6px; font-size: 0.9em;">${iconData.emoji}</span>
+                        </div>
                     </div>
                     <div class="board-groups-box">
                         <div class="board-groups-label">Deltagande grupper:</div>
@@ -1961,12 +2221,14 @@
                     </div>
                     ${dayInfo.afternoon.teacher ? `
                         <div class="board-teacher-info">
-                            <span>👤</span> <strong>Ansvarig pedagog:</strong> ${escapeHtml(dayInfo.afternoon.teacher)}
+                            <span class="material-symbols-rounded" style="color: var(--accent);">person</span>
+                            <span>Ansvarig pedagog: <strong>${escapeHtml(dayInfo.afternoon.teacher)}</strong></span>
                         </div>
                     ` : ''}
                     ${dayInfo.afternoon.bakis ? `
                         <div class="board-extra-note">
-                            💡 <strong>Samarbetsövning:</strong> ${escapeHtml(dayInfo.afternoon.bakis)}
+                            <span class="material-symbols-rounded" style="color: #d97706;">lightbulb</span>
+                            <div><strong>Samarbetsövning:</strong> ${escapeHtml(dayInfo.afternoon.bakis)}</div>
                         </div>
                     ` : ''}
                 </div>
@@ -1976,7 +2238,7 @@
         if (!hasAnyActivity) {
             cardsHtml = `
                 <div class="board-empty-state">
-                    <div style="font-size: 2.5em; margin-bottom: 12px;">🎈</div>
+                    <div style="font-size: 2.8em; margin-bottom: 12px;" class="noto-emoji">🎈</div>
                     <h3 style="margin: 0 0 8px 0; color: var(--primary);">Fri lek, skapande och utevistelse!</h3>
                     <p style="margin: 0;">Ingen gemensam planerad aktivitet inlagd för ${escapeHtml(dayName)}.</p>
                 </div>
@@ -1986,7 +2248,10 @@
         return `
             <div class="board-day-container">
                 <div class="board-day-header">
-                    <h3>${greeting}</h3>
+                    <h3>
+                        <span class="material-symbols-rounded" style="font-size: 1.2em; color: #fbbf24;">wb_sunny</span>
+                        <span>${greeting}</span>
+                    </h3>
                     <span class="board-day-tag">${tagText}</span>
                 </div>
                 <div class="board-cards-grid">
@@ -2009,18 +2274,23 @@
             let itemsHtml = "";
 
             if (dayInfo.halvklass && dayInfo.halvklass.activity) {
-                const icon = getActivityIcon(dayInfo.halvklass.activity);
+                const iconData = getActivityIconData(dayInfo.halvklass.activity);
                 itemsHtml += `
-                    <div class="board-col-item" style="border-left: 4px solid #62b6cb;">
-                        <div style="font-size: 0.75em; font-weight: 800; color: #0369a1; text-transform: uppercase;">🎒 Halvklass</div>
-                        <div class="board-col-item-title"><span>${icon}</span> <span>${escapeHtml(dayInfo.halvklass.activity)}</span></div>
-                        ${dayInfo.halvklass.teacher ? `<div class="board-col-teacher">👤 ${escapeHtml(dayInfo.halvklass.teacher)}</div>` : ''}
+                    <div class="board-col-item" style="border-left: 4px solid var(--board-green);">
+                        <div style="font-size: 0.72em; font-weight: 800; color: var(--board-green); text-transform: uppercase; display: flex; align-items: center; gap: 4px;">
+                            <span class="material-symbols-rounded" style="font-size: 1.1em;">backpack</span> Halvklass
+                        </div>
+                        <div class="board-col-item-title">
+                            <span class="material-symbols-rounded" style="color: ${iconData.color}; font-size: 1.2em;">${iconData.icon}</span>
+                            <span>${escapeHtml(dayInfo.halvklass.activity)}</span>
+                        </div>
+                        ${dayInfo.halvklass.teacher ? `<div class="board-col-teacher"><span class="material-symbols-rounded" style="font-size: 1.1em;">person</span> ${escapeHtml(dayInfo.halvklass.teacher)}</div>` : ''}
                     </div>
                 `;
             }
 
             if (dayInfo.afternoon && dayInfo.afternoon.activity) {
-                const icon = getActivityIcon(dayInfo.afternoon.activity);
+                const iconData = getActivityIconData(dayInfo.afternoon.activity);
                 let groupTags = "";
                 if (dayInfo.afternoon.groups && dayInfo.afternoon.groups.length > 0) {
                     groupTags = dayInfo.afternoon.groups.map(g => {
@@ -2029,11 +2299,16 @@
                     }).join('');
                 }
                 itemsHtml += `
-                    <div class="board-col-item" style="border-left: 4px solid #e76f51;">
-                        <div style="font-size: 0.75em; font-weight: 800; color: #c2410c; text-transform: uppercase;">⏰ 15:00 - 16:00</div>
-                        <div class="board-col-item-title"><span>${icon}</span> <span>${escapeHtml(dayInfo.afternoon.activity)}</span></div>
+                    <div class="board-col-item" style="border-left: 4px solid var(--board-orange);">
+                        <div style="font-size: 0.72em; font-weight: 800; color: var(--board-orange); text-transform: uppercase; display: flex; align-items: center; gap: 4px;">
+                            <span class="material-symbols-rounded" style="font-size: 1.1em;">schedule</span> 15:00 - 16:00
+                        </div>
+                        <div class="board-col-item-title">
+                            <span class="material-symbols-rounded" style="color: ${iconData.color}; font-size: 1.2em;">${iconData.icon}</span>
+                            <span>${escapeHtml(dayInfo.afternoon.activity)}</span>
+                        </div>
                         ${groupTags ? `<div class="board-col-item-groups">${groupTags}</div>` : ''}
-                        ${dayInfo.afternoon.teacher ? `<div class="board-col-teacher">👤 ${escapeHtml(dayInfo.afternoon.teacher)}</div>` : ''}
+                        ${dayInfo.afternoon.teacher ? `<div class="board-col-teacher"><span class="material-symbols-rounded" style="font-size: 1.1em;">person</span> ${escapeHtml(dayInfo.afternoon.teacher)}</div>` : ''}
                     </div>
                 `;
             }
@@ -2041,14 +2316,17 @@
             if (!itemsHtml) {
                 itemsHtml = `
                     <div class="board-col-item" style="color: #94a3b8; text-align: center; padding: 18px 6px; font-size: 0.85em;">
-                        Fri lek 🌈
+                        Fri lek <span class="noto-emoji">🌈</span>
                     </div>
                 `;
             }
 
             colsHtml += `
                 <div class="board-week-col ${isToday ? 'is-today' : ''}">
-                    <div class="board-col-header">${day} ${isToday ? '⭐' : ''}</div>
+                    <div class="board-col-header">
+                        ${isToday ? '<span class="material-symbols-rounded" style="color: #f59e0b; font-size: 1.1em;">star</span>' : ''}
+                        <span>${day}</span>
+                    </div>
                     ${itemsHtml}
                 </div>
             `;
@@ -2126,7 +2404,7 @@
         document.getElementById('letter-text').value = letterText;
         document.getElementById('letter-modal').style.display = 'flex';
         const copyBtn = document.getElementById('copy-letter-btn');
-        copyBtn.textContent = '📋 Kopiera till urklipp';
+        copyBtn.innerHTML = '<span class="material-symbols-rounded">content_copy</span> Kopiera till urklipp';
         copyBtn.style.backgroundColor = 'var(--board-green)';
     }
 
@@ -2141,11 +2419,11 @@
 
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(textarea.value).then(() => {
-                btn.textContent = '✅ Kopierat!';
+                btn.innerHTML = '<span class="material-symbols-rounded">check</span> Kopierat!';
                 btn.style.backgroundColor = '#10b981';
                 showToast("✅ Veckobrev kopierat till urklipp!");
                 setTimeout(() => {
-                    btn.textContent = '📋 Kopiera till urklipp';
+                    btn.innerHTML = '<span class="material-symbols-rounded">content_copy</span> Kopiera till urklipp';
                     btn.style.backgroundColor = 'var(--board-green)';
                 }, 3000);
             }).catch(() => {
@@ -2158,11 +2436,11 @@
 
     function fallbackCopy(textarea, btn) {
         document.execCommand('copy');
-        btn.textContent = '✅ Kopierat!';
+        btn.innerHTML = '<span class="material-symbols-rounded">check</span> Kopierat!';
         btn.style.backgroundColor = '#10b981';
         showToast("✅ Kopierat!");
         setTimeout(() => {
-            btn.textContent = '📋 Kopiera till urklipp';
+            btn.innerHTML = '<span class="material-symbols-rounded">content_copy</span> Kopiera till urklipp';
             btn.style.backgroundColor = 'var(--board-green)';
         }, 3000);
     }
@@ -2226,7 +2504,8 @@
                     actPrint.className = 'activity-print-val print-only';
                     actSel.parentNode.insertBefore(actPrint, actSel.nextSibling);
                 }
-                actPrint.textContent = actSel.value ? `${getActivityIcon(actSel.value)} ${actSel.value}` : "– Ingen aktivitet vald –";
+                const iconData = getActivityIconData(actSel.value);
+                actPrint.textContent = actSel.value ? `${iconData.emoji} ${actSel.value}` : "– Ingen aktivitet vald –";
             }
 
             // Samarbetsövning (bakis)
@@ -2265,7 +2544,6 @@
 
     /* INITIALISERINGS-LOGIK */
     window.onload = function() {
-        // Kontrollera om sidan öppnades via en delad länk (#share=...)
         const wasShared = checkIncomingSharedData();
 
         // Kontrollera inloggad användare
@@ -2275,13 +2553,12 @@
             try {
                 const auth = JSON.parse(authSaved);
                 if (auth.isLoggedIn && auth.username) {
-                    userDisplay.innerHTML = `<span class="user-badge" style="background: #dcfce7; color: #166534;">👤 Inloggad: ${escapeHtml(auth.username)}</span>`;
+                    userDisplay.innerHTML = `<span class="user-badge" style="background: #dcfce7; color: #166534; border-color: #bbf7d0;"><span class="material-symbols-rounded" style="color: #166534;">account_circle</span> Inloggad: ${escapeHtml(auth.username)}</span>`;
                 }
             } catch(e) {}
         }
 
         if (!wasShared) {
-            // Läs konfiguration
             const savedConfig = localStorage.getItem('fritidsConfigStateCustomAct');
             if (savedConfig) {
                 try {
