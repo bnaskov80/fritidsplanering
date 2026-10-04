@@ -1278,7 +1278,7 @@
         <div class="header-inputs">
             <div class="form-group">
                 <label for="week-num"><span class="material-symbols-rounded">date_range</span> Vecka:</label>
-                <input type="number" id="week-num" placeholder="t.ex. 40" style="width: 80px;" oninput="saveAllData()">
+                <input type="number" id="week-num" placeholder="t.ex. 40" min="1" max="53" style="width: 80px;" oninput="onWeekChange()">
             </div>
             <div class="form-group">
                 <label for="date-range"><span class="material-symbols-rounded">event</span> Datum / Period:</label>
@@ -1463,6 +1463,73 @@
     ];
 
     let currentBoardTab = "idag";
+
+    /* --- DELAT LÄGE & KODNING --- */
+    // Delad länk öppnas som skrivskyddad förhandsvisning: mottagarens egna data skrivs aldrig över.
+    let isSharedView = false;
+    let sharedState = null;
+
+    function encodeShare(obj) {
+        // base64url: undviker '+', '/' och '=' som annars kan tolkas fel i en URL
+        return btoa(encodeURIComponent(JSON.stringify(obj)))
+            .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    }
+
+    function decodeShare(str) {
+        let b64 = str.replace(/ /g, '+').replace(/-/g, '+').replace(/_/g, '/'); // tål även gamla länkar
+        while (b64.length % 4) b64 += '=';
+        return JSON.parse(decodeURIComponent(atob(b64)));
+    }
+
+    function getCurrentIsoWeek(d = new Date()) {
+        const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+        t.setUTCDate(t.getUTCDate() + 4 - (t.getUTCDay() || 7));
+        const yearStart = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
+        return Math.ceil(((t - yearStart) / 86400000 + 1) / 7);
+    }
+
+    function getCurrentWeekRangeText(d = new Date()) {
+        const mon = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+        mon.setDate(mon.getDate() - ((mon.getDay() + 6) % 7));
+        const fri = new Date(mon); fri.setDate(mon.getDate() + 4);
+        const fmt = x => x.toLocaleDateString('sv-SE', { day: 'numeric', month: 'short' }).replace('.', '');
+        return `${fmt(mon)} - ${fmt(fri)}`;
+    }
+
+    // Returnerar måndagen för ISO-vecka `week`. Väljer det år där veckan ligger närmast idag.
+    function getMondayOfIsoWeek(week, ref = new Date()) {
+        let best = null, bestDiff = Infinity;
+        for (let y = ref.getFullYear() - 1; y <= ref.getFullYear() + 1; y++) {
+            const jan4 = new Date(y, 0, 4);
+            const mon = new Date(y, 0, 4 - ((jan4.getDay() + 6) % 7) + (week - 1) * 7);
+            if (getCurrentIsoWeek(mon) !== week) continue; // t.ex. v. 53 finns inte alla år
+            const diff = Math.abs(mon - ref);
+            if (diff < bestDiff) { bestDiff = diff; best = mon; }
+        }
+        return best;
+    }
+
+    // Körs när veckonumret ändras: räknar ut datumintervallet automatiskt.
+    function onWeekChange() {
+        const w = parseInt(document.getElementById('week-num').value, 10);
+        const r = document.getElementById('date-range');
+        if (r && w >= 1 && w <= 53) {
+            const mon = getMondayOfIsoWeek(w);
+            if (mon) r.value = getCurrentWeekRangeText(mon);
+        }
+        saveAllData();
+    }
+
+    function autofillWeekIfEmpty() {
+        const w = document.getElementById('week-num');
+        const r = document.getElementById('date-range');
+        if (w && !w.value.trim()) w.value = getCurrentIsoWeek();
+        if (r && !r.value.trim()) {
+            const wk = parseInt(w.value, 10);
+            const mon = wk >= 1 && wk <= 53 ? getMondayOfIsoWeek(wk) : null;
+            r.value = getCurrentWeekRangeText(mon || new Date());
+        }
+    }
 
     /* --- TOAST-AVISERINGAR --- */
     function showToast(msg, duration = 3000) {
@@ -1649,8 +1716,7 @@
             };
         });
 
-        const jsonStr = JSON.stringify(payload);
-        const encoded = btoa(encodeURIComponent(jsonStr));
+        const encoded = encodeShare(payload);
         const baseUrl = window.location.href.split('#')[0];
         const viewParam = onlyBoard ? "board" : "app";
         return `${baseUrl}#share=${encoded}&view=${viewParam}`;
@@ -1767,20 +1833,15 @@
                 const shareData = params.get('share');
                 const view = params.get('view');
                 if (shareData) {
-                    const jsonStr = decodeURIComponent(atob(shareData));
-                    const payload = JSON.parse(jsonStr);
+                    const payload = decodeShare(shareData);
 
-                    if (payload.c) {
-                        appConfig = payload.c;
-                        localStorage.setItem('fritidsConfigStateCustomAct', JSON.stringify(appConfig));
-                    }
-                    if (payload.p) {
-                        localStorage.setItem('fritidsPlaneringStateCustomAct', JSON.stringify(payload.p));
-                    }
+                    isSharedView = true;
+                    if (payload.c) appConfig = Object.assign({}, appConfig, payload.c);
+                    sharedState = payload.p || null;
 
                     buildAppUI();
                     loadSavedData();
-                    showToast(`✅ Inläst delad planering för ${appConfig.grade}!`);
+                    showToast(`👀 Delad planering för ${appConfig.grade} (förhandsvisning – inget sparas hos dig)`, 5000);
 
                     if (view === 'board' || !view) {
                         showBoardView();
@@ -1937,7 +1998,7 @@
     function saveAllData() {
         const weekEl = document.getElementById('week-num');
         const dateEl = document.getElementById('date-range');
-        if (!weekEl || !dateEl) return;
+        if (!weekEl || !dateEl || isSharedView) return;
 
         const state = {
             weekNum: weekEl.value,
@@ -1966,11 +2027,11 @@
     }
 
     function loadSavedData() {
-        const saved = localStorage.getItem('fritidsPlaneringStateCustomAct');
-        if (!saved) return;
+        const saved = isSharedView ? null : localStorage.getItem('fritidsPlaneringStateCustomAct');
+        if (!saved && !sharedState) { autofillWeekIfEmpty(); return; }
 
         try {
-            const state = JSON.parse(saved);
+            const state = isSharedView ? sharedState : JSON.parse(saved);
 
             if (state.weekNum !== undefined) document.getElementById('week-num').value = state.weekNum;
             if (state.dateRange !== undefined) document.getElementById('date-range').value = state.dateRange;
@@ -2005,6 +2066,7 @@
                     }
                 });
             }
+            autofillWeekIfEmpty();
         } catch (e) {
             console.error("Kunde inte läsa in sparad planering", e);
         }
@@ -2012,7 +2074,8 @@
 
     function clearSavedData() {
         if (confirm("Är du säker på att du vill rensa den sparade planeringen?")) {
-            localStorage.removeItem('fritidsPlaneringStateCustomAct');
+            if (!isSharedView) localStorage.removeItem('fritidsPlaneringStateCustomAct');
+            history.replaceState(null, '', location.pathname);
             location.reload();
         }
     }
